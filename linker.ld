@@ -19,10 +19,10 @@ SECTIONS
 	}
 	. = 0x008000;
 	.c_code : AT(0x8000){
-		build/main.o(*);
-	}
-	. = 0x008600;
-	.utils : AT(0x8600){
 		build/utils.o(*);
+		build/main.o(*);
+		build/video.o(*);
+		build/interrupt.o(*);
+		build/keyboard.o(*);
 	}
 }

@@ -178,6 +178,15 @@ eff_2_div_2:
 
 ;-------END--------------
 
+
+;-------FUN--------------
+;WaitLoop16: wiats for the keyboard to be ready
+WaitLoop16:	in     al, 64h       ; Read Status byte 
+		and    al, 01b       ; Test OBF flag (Status<0>) 
+		jnz    WaitLoop16    ; Wait for OBF = 0 
+		ret
+;-------END--------------
+
 startup:
 
 
@@ -199,32 +208,17 @@ rd1:
 	PUSH DX
 	MOV CX, 0x0
 	PUSH CX
-	MOV BX, 7
+	MOV BX, 9
 	PUSH BX
 	MOV EAX, 2
 	PUSH EAX
 rd2:
 	CALL read
 	POPA
+
+
 	
-	MOV AL, 0xF3
-	OUT 0x60, AL 
-	NOP
-	NOP
-	MOV AL, 01111111b
-	OUT 0x60, AL
-;	PUSHA
-;	MOV DX, 0x840
-;	PUSH DX
-;	MOV CX, 0x0
-;	PUSH CX
-;	MOV BX, 1
-;	PUSH BX
-;	MOV EAX, 6
-;	PUSH EAX
-;rd3:
-;	CALL read
-;	POPA
+	
 	
 rdOver:
 	MOV AX, msg2

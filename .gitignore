@@ -1,3 +1,5 @@
 build/
 temp/
 *.log
+bootload.bin
+bootload.sym
