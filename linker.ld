@@ -1,8 +1,16 @@
 ENTRY(_main);
 SECTIONS
 {
+	. = 0x008000;
+	.text : AT(0x8000){
+		build/utils.o(*);
+		build/main.o(*);
+		build/video.o(*);
+		build/interrupt.o(*);
+		build/keyboard.o(*);
+	}
 	. = 0x7C00;
-	.text  :  AT(0x7C00)
+	.init_code  :  AT(0x7C00)
 	{
 		build/entry.o(.text);
 		build/entry.o(.tmpdata);
@@ -17,12 +25,5 @@ SECTIONS
 	{
 		build/entry.o(.data);
 	}
-	. = 0x008000;
-	.c_code : AT(0x8000){
-		build/utils.o(*);
-		build/main.o(*);
-		build/video.o(*);
-		build/interrupt.o(*);
-		build/keyboard.o(*);
-	}
+
 }

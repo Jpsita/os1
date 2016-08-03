@@ -7,8 +7,8 @@
 void entryc(){
 	printString("Hello fools!!\n");
 	PIC_remap(0x20, 0x28);
+	create_IDT();
 	while(1){
 		char key = getCh();
-		parseKey(key);
 	}
 }

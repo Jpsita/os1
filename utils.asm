@@ -1,6 +1,8 @@
 USE32
 SECTION .text
 
+extern PIC_sendEOI
+
 ;----------FUN----------
 ; FUNCTION inb 
 global inb
@@ -34,20 +36,21 @@ io_wait:
 
 
 ;----------FUN----------
-; FUNCTION outb 
+; FUNCTION outb (INT_32 port, INT_32 data)
+;-----------------------
 global outb
 outb :
 	PUSH EBP
 	MOV EBP, ESP
-	MOV EAX, [EBP + 8]
-	MOV EDX, [EBP + 12] 
+	MOV EDX, [EBP + 8]	;get port
+	MOV EAX, [EBP + 12] 	;get data
 outb_debug:
 	OUT DX, AL
 	POP EBP
 outb_exit:
 	RET
 	
-;-----------------------
+;----------END----------
 
 ;----------FUN----------
 ; FUNCTION WaitLoop
@@ -74,4 +77,42 @@ keybSp:
 	RET
 ;----------END----------	
 
+;----------SEC----------
+; INTERRUPT HANDLERS
+;-----------------------
 
+;----------HDN----------
+; HANDLER: hndl1: handles interrupt with IRQ 1.
+extern handle_irq_1
+; this will only redirect to c handler funxtion
+global irq_1
+irq_1:
+	PUSHA
+	XOR 	EAX,	EAX
+	CALL 	handle_irq_1	;move to C Function
+	MOV	AL,	0x01
+	PUSH	EAX
+	CALL	PIC_sendEOI
+	POPA	
+	IRET
+	
+;----------END----------
+
+;----------FUN----------
+; FUNCTION: load_IDT(uint32_t addr)
+; params: addr Address of the IDT Descriptor
+;-----------------------
+global load_IDT
+load_IDT:
+	PUSH	EBP
+	MOV	EBP, ESP
+	MOV	EAX, [EBP + 8]	;load addr
+load_IDT_debug:
+	LIDT	[EAX]
+load_IDT_sti:
+	STI
+	POP 	EBP
+load_IDT_ret:
+	RET
+	
+;----------END----------

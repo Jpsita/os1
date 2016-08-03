@@ -1,5 +1,6 @@
 #ifndef __JPS_INTERRUPT_H
 #define __JPS_INTERRUPT_H
+#include "main.h"
 
 #define PIC1		0x20		/* IO base address for master PIC */
 #define PIC2		0xA0		/* IO base address for slave PIC */
@@ -25,6 +26,27 @@ void PIC_sendEOI(unsigned char irq);
 #define ICW4_SFNM	0x10		/* Special fully nested (not) */
 
 void PIC_remap(int offset1, int offset2);
+
+void create_IDT();
+
+
+typedef struct  {
+   uint16_t offset_1; // offset bits 0..15
+   uint16_t selector; // a code segment selector in GDT or LDT
+   uint8_t zero;      // unused, set to 0
+   uint8_t type_attr; // type and attributes, see below
+   uint16_t offset_2; // offset bits 16..31
+}IDTDescr;
+
+extern IDTDescr IDT[];
+
+void zero_IDT(IDTDescr * descr);
+
+typedef struct {
+	uint16_t length;
+	uint32_t address;
+} IDTPointer;
+
 
 
 #endif

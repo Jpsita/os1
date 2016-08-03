@@ -25,8 +25,8 @@ _main:
 ;-------------------------- 
 
 print_int32:
-	MOV BP, SP
-	PUSHA
+	MOV BP, SP		;
+	PUSHA			;
 	MOV EBX, [BP + 2]	
 	MOV AH, PRINT_FUNC_AH
 	MOV AL, '0'
@@ -208,7 +208,7 @@ rd1:
 	PUSH DX
 	MOV CX, 0x0
 	PUSH CX
-	MOV BX, 9
+	MOV BX, 14
 	PUSH BX
 	MOV EAX, 2
 	PUSH EAX
