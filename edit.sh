@@ -1,2 +1,2 @@
 #!/bin/bash
-screen -S Scite -m -d SciTE linker.ld entry.asm main.c video.h keyboard.h
+tmux new -s scite -d "scite linker.ld entry.asm main.c video.h keyboard.h"

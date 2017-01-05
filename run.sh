@@ -1,4 +1,5 @@
 #!/bin/bash
 
 echo Running...
-qemu-system-i386 -fda bootload.bin -m 512M
+tmux new -s qemu -d "qemu-system-i386 -fda bootload.bin -m 512M" 
+
