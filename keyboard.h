@@ -7,4 +7,5 @@ char getCh();
 
 void parseKey(short int key);
 
+char scancodeToAscii(unsigned char sc);
 #endif

@@ -6,19 +6,25 @@
 char getScancode()
 {
 	char c=0;
-	char d = 0;
+	char d=0;
 	do {
 		d = inb(0x60);
-		if(d != c){
-			c = inb(0x60);
-			if(c> 0)
+		if(d!=c)
+		{
+			c=inb(0x60);
+			if(c>0){
 				return c;
+			}
 		}
 	}while(1);
 }
 
 char getCh(){
 	return scancode_tbl_it[getScancode() - 1];
+}
+
+char scancodeToAscii(unsigned char sc){
+	return scancode_tbl_it[sc - 1]; 
 }
 
 void parseKey(short int key){

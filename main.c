@@ -5,10 +5,12 @@
 #include "interrupt.h"
 
 void entryc(){
-	printString("Hello fools!!\n");
 	PIC_remap(0x20, 0x28);
 	create_IDT();
+	printString("Hello fools!!\n");
+	//printString("TEST_3\n");
 	while(1){
-		char key = getCh();
+		char c = getCh();
+		printCharacter(c);
 	}
 }

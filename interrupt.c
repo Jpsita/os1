@@ -1,14 +1,29 @@
 #include "interrupt.h"
+#include "keyboard.h"
 #include "utils.h"
 #include "video.h"
 
-IDTDescr IDT[33];
+IDTDescr IDT[256];
 
 void PIC_sendEOI(unsigned char IRQ){
 	if(IRQ >= 8){
 		outb(PIC2_COMMAND, PIC_EOI);
 	}
 	outb(PIC1_COMMAND, PIC_EOI);
+}
+
+void c_dbl_flt(){
+	printString("Double Fault!\n");
+	while(1){
+		
+	}
+}
+
+void c_flt(){
+	printString("Fault!\n");
+	while(1){
+		
+	}
 }
 
 void PIC_remap(int offset1, int offset2){
@@ -41,7 +56,9 @@ void PIC_remap(int offset1, int offset2){
 }
 
 void handle_irq_1(){
-	printCharacter('I');
+	unsigned char x = inb(0x60);
+	char k = scancodeToAscii(x);
+	printCharacter(k);
 }
 
 void zero_IDT(IDTDescr * idt){
@@ -52,47 +69,71 @@ void zero_IDT(IDTDescr * idt){
 	idt->offset_2 = 0;
 }
 
+void db0_fault(){
+	printString("FAULT: DB0. Check ESP for faulting address,");
+	while(1){
+		
+	}
+}
+
+void segment_fault(){
+	printString("FAULT: SEGMENT NOT PRESENT. Check ESP for faulting segment.");
+	while(1){
+		
+	}
+}
+
+void stack_fault(){
+	printString("FAULT: STACK SEGMENT NOT PRESENT.");
+	while(1){
+		
+	}
+}
+
+void overflow_fault(){
+	printString("FAULT: OVERFLOW");
+	while(1){
+		
+	}
+}
+
+void protection_fault(){
+	printString("FAULT: GENERIC PROTECTION");
+	while(1){
+		
+	}
+}
+
+void fill_IDT_entry(uint16_t vector, uint32_t address, uint16_t trap){
+	IDT[vector].offset_1 = (uint16_t) address;
+	IDT[vector].offset_2 = (uint16_t) ((address) >> 16);
+	IDT[vector].selector = 0x10;
+	if(trap != 0){
+		IDT[vector].type_attr = 0x8F;
+	}else{
+		IDT[vector].type_attr = 0x8E;
+	}
+}	
+
 void create_IDT(){
 	IDTPointer p;
 	p.address = (uint32_t) IDT;
-	p.length = sizeof(IDT);
-	zero_IDT(&IDT[0]);
-	zero_IDT(&IDT[1]);
-	zero_IDT(&IDT[2]);
-	zero_IDT(&IDT[3]);
-	zero_IDT(&IDT[4]);
-	zero_IDT(&IDT[5]);
-	zero_IDT(&IDT[6]);
-	zero_IDT(&IDT[7]);
-	zero_IDT(&IDT[8]);
-	zero_IDT(&IDT[9]);
-	zero_IDT(&IDT[10]);
-	zero_IDT(&IDT[11]);
-	zero_IDT(&IDT[12]);
-	zero_IDT(&IDT[13]);
-	zero_IDT(&IDT[14]);
-	zero_IDT(&IDT[15]);
-	zero_IDT(&IDT[16]);
-	zero_IDT(&IDT[17]);
-	zero_IDT(&IDT[18]);
-	zero_IDT(&IDT[19]);
-	zero_IDT(&IDT[20]);
-	zero_IDT(&IDT[21]);
-	zero_IDT(&IDT[22]);
-	zero_IDT(&IDT[23]);
-	zero_IDT(&IDT[24]);
-	zero_IDT(&IDT[25]);
-	zero_IDT(&IDT[26]);
-	zero_IDT(&IDT[27]);
-	zero_IDT(&IDT[28]);
-	zero_IDT(&IDT[29]);
-	zero_IDT(&IDT[30]);
-	zero_IDT(&IDT[31]);
+	p.length = sizeof(IDT) - 1;
+	for(int i = 0; i < 256; i++){
+		zero_IDT(&IDT[i]);
+	}
+	
+	uint32_t db0_addr = (uint32_t) &d_b_0_HNDLR;
+	fill_IDT_entry(0x00, db0_addr, 0);
+	fill_IDT_entry(0x4, (uint32_t) &overflow_fault_HNDLR, 0);
+	uint32_t sgf_addr = (uint32_t) &segment_fault_HNDLR;
+	fill_IDT_entry(0x0B, sgf_addr, 0);
+	uint32_t stf_addr = (uint32_t) &stack_fault_HNDLR;
+	fill_IDT_entry(0x09, stf_addr, 0);
 	uint32_t irq_addr =(uint32_t) &irq_1;
-	IDT[32].offset_1 = (uint16_t) irq_addr;
-	IDT[32].offset_2 = (uint16_t) ((irq_addr) >> 16);
-	IDT[32].zero = 0;
-	IDT[32].selector = 0b0000100000000000;
-	IDT[32].type_attr = 0b1110;
-	load_IDT((uint32_t) &IDT[0]);
+	fill_IDT_entry(0x0D, (uint32_t) &protection_fault_HNDLR, 0);
+	fill_IDT_entry(0x20, irq_addr, 1);
+	uint32_t dfh_addr = (uint32_t) &double_fault_HNDLR;
+	fill_IDT_entry(0x08, dfh_addr, 0);
+	load_IDT((uint32_t) &p);
 }

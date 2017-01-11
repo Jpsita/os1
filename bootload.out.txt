@@ -1,0 +1,101 @@
+000085f7 T clearScreen
+00007e30 d code_seg
+00008e53 T create_IDT
+00007e00 d .data
+00007e28 d data_seg
+00000000 N .debug_abbrev
+00000000 N .debug_aranges
+00000000 N .debug_frame
+00000000 N .debug_info
+00000000 N .debug_line
+00000000 N .debug_loc
+00000000 N .debug_pubnames
+00008690 T deleteCurrentChar
+00007c97 t eff_2_chs	entry.asm:146
+00007ca5 t eff_2_div_1	entry.asm:168
+00007cb4 t eff_2_div_2	entry.asm:173
+00007c91 t eff_read	entry.asm:142
+00007c96 t eff_read_ret	entry.asm:146
+00007c75 t eff_ret	entry.asm:117
+00000000 a entry.asm
+0000816c T entryc
+00000012 a FLOPPY_144_SECTORS_PER_TRACK
+00000002 a FLOPPY_READ_FUNC_AH
+00000013 a FLOPPY_READ_FUNC_INT
+00007d31 t from_protected	entry.asm:248
+00007e20 d gdt
+00007e1a d gdt_descriptor
+00007e38 d gdt_end
+00007e1c d gdt_offset
+00007e1a d gdt_size
+0000971f T getCh
+000096c8 T getScancode
+00008e0f T handle_irq_1
+000095c0 T IDT
+00008000 T inb
+00008009 t inb_debug
+00008003 t inb_debug2
+0000800b t inb_exit
+00007c00 t .init_code
+00000000 a interrupt.c
+0000800c T io_wait
+0000803c T irq_1
+00000000 a keyboard.c
+00008027 T keybSp
+0000804e T load_IDT
+00008054 t load_IDT_debug
+00008059 t load_IDT_ret
+00008057 t load_IDT_sti
+00007d31 t loop_32	entry.asm:248
+00007c00 T _main
+00000000 a main.c
+00000000 a MAIN_FLOPPY_DRIVE
+00007e00 d msg2
+0000865c T newLine
+00000000 a NULL
+00007e20 d null_seg
+00008014 T outb
+0000801d t outb_debug
+0000801f t outb_exit
+00009736 T parseKey
+00008d0e T PIC_remap
+00008cd8 T PIC_sendEOI
+00008800 T posX
+00008804 T posY
+00007c59 t print	entry.asm:73
+0000878b T printCharacter
+000085ac T printCharacterAtPos
+00007c6a t print_exit	entry.asm:97
+0000000e a PRINT_FUNC_AH
+00000010 a PRINT_FUNC_INT
+00007c03 t print_int32
+00007c55 t print_int32_do_loop	entry.asm:71
+00007c19 t print_int32_loop	entry.asm:40
+00007c4a t print_int32_moreThanTen	entry.asm:65
+00007c33 t print_int32_next_1	entry.asm:53
+00007c2b t print_int32_next_2	entry.asm:49
+00007c23 t print_int32_next_4	entry.asm:45
+00007c3b t print_int32_next_over	entry.asm:57
+00007c5f t print_loop	entry.asm:90
+000086f5 T printString
+00008635 T printTab
+00007cda t rd1	entry.asm:203
+00007cf3 t rd2	entry.asm:216
+00007cf7 t rdOver	entry.asm:224
+00007c6c t read	entry.asm:98
+00000000 a scancodes.c
+00009ae0 T scancode_tbl_it
+00007d42 d .sig
+00007cc6 t startup	entry.asm:193
+00008000 t .text
+00007d3e t tmpb1
+00007d3f t tmpb2
+00007d40 t tmpb3
+00007d41 t tmpb4
+00007d03 t to_protected	entry.asm:234
+00000000 a utils.asm
+00000000 a video.c
+000087fc T videoMem
+00008020 T waitLoop
+00007cbf t WaitLoop16	entry.asm:184
+00008e25 T zero_IDT

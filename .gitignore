@@ -3,3 +3,4 @@ temp/
 *.log
 bootload.bin
 bootload.sym
+*.bat

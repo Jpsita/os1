@@ -7,18 +7,17 @@ extern PIC_sendEOI
 ; FUNCTION inb 
 global inb
 inb:
-	XOR AL, AL
+	XOR AX, AX
 inb_debug2:
-	PUSH EBP
-	MOV EBP, ESP
+	ENTER 0, 0
 	MOV EDX, [EBP + 8]
 inb_debug:
 	IN AL, DX
-	POP EBP
+	LEAVE
 inb_exit:
 	RET
 	
-;-----------------------
+;----------END----------
 
 ;----------FUN----------
 ; FUNCTION io_wait()
@@ -40,13 +39,12 @@ io_wait:
 ;-----------------------
 global outb
 outb :
-	PUSH EBP
-	MOV EBP, ESP
+	ENTER 0, 0
 	MOV EDX, [EBP + 8]	;get port
 	MOV EAX, [EBP + 12] 	;get data
 outb_debug:
 	OUT DX, AL
-	POP EBP
+	LEAVE
 outb_exit:
 	RET
 	
@@ -87,13 +85,16 @@ extern handle_irq_1
 ; this will only redirect to c handler funxtion
 global irq_1
 irq_1:
-	PUSHA
-	XOR 	EAX,	EAX
+	PUSHAD
+irq_1_dbg:
 	CALL 	handle_irq_1	;move to C Function
+	XOR 	EAX, EAX
 	MOV	AL,	0x01
 	PUSH	EAX
 	CALL	PIC_sendEOI
-	POPA	
+	POP 	EAX
+	POPAD
+irq_1_exit:
 	IRET
 	
 ;----------END----------
@@ -104,15 +105,102 @@ irq_1:
 ;-----------------------
 global load_IDT
 load_IDT:
-	PUSH	EBP
-	MOV	EBP, ESP
-	MOV	EAX, [EBP + 8]	;load addr
+	ENTER 0, 0
+	MOV		EAX, [EBP + 8]	;load addr
 load_IDT_debug:
 	LIDT	[EAX]
 load_IDT_sti:
 	STI
-	POP 	EBP
+	LEAVE
 load_IDT_ret:
 	RET
 	
+;----------END----------
+
+
+;----------FUN---------
+; FUNCTION double_fault_HNDLR
+; params: 0 default 0 value for double faults.
+;----------------------
+extern c_dbl_flt
+global double_fault_HNDLR
+double_fault_HNDLR:
+	MOV		EBX,	EBP
+	MOV 	EBP, 	ESP
+	ADD		EBP,	4
+	MOV		ESP,	EBP
+	MOV		EBP,	EBX
+	CALL	c_dbl_flt
+double_fault_HNDLR_exit:
+	IRET
+	
+;----------END----------
+	
+;----------FUN---------
+; FUNCTION fault_HNDLR
+; params: 0 default 0 value for double faults.
+;----------------------
+extern c_flt
+global fault_HNDLR
+fault_HNDLR:
+	CALL	c_flt
+fault_HNDLR_exit:
+	IRET
+	
+;----------END----------
+
+;----------FUN---------
+; FUNCTION d_b_0_HNDLR
+; params: 0 default 0 value for double faults.
+;----------------------
+extern db0_fault
+global d_b_0_HNDLR
+d_b_0_HNDLR:
+
+	CALL	db0_fault
+d_b_0_HNDLR_exit:
+	IRET
+
+;----------END----------
+
+;----------FUN---------
+; FUNCTION segment_fault_HNDLR
+; params: 0 default 0 value for double faults.
+;----------------------
+
+extern segment_fault
+global segment_fault_HNDLR
+segment_fault_HNDLR:
+	CALL	segment_fault
+segment_fault_HNDLR_exit:
+	IRET
+	
+;----------END----------
+
+
+extern stack_fault
+global stack_fault_HNDLR
+stack_fault_HNDLR:
+	CALL stack_fault
+stack_fault_HNDLR_exit:
+	IRET
+	
+;----------END----------
+
+extern overflow_fault
+global overflow_fault_HNDLR
+overflow_fault_HNDLR:
+	CALL overflow_fault
+overflow_fault_HNDLR_exit:
+	IRET
+
+;----------END----------
+
+extern protection_fault
+global protection_fault_HNDLR
+protection_fault_HNDLR:
+	CALL	protection_fault
+protection_fault_HNDLR_exit:
+	IRET
+
 ;----------END----------

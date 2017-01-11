@@ -1,4 +1,4 @@
 symbol-file build/bootload.elf
 target remote :1234
-directory /root/asmtest
+# directory ~/devel/os1
 set disassembly-flavor intel
