@@ -1,5 +1,8 @@
 #ifndef __JPS_FLOPPY_H
 #define __JPS_FLOPPY_H
+#include "main.h"
+
+//DMA
 
 #define DMA_START_ADDR_REG_IO_0		0x00
 #define DMA_START_ADDR_REG_IO_4		0xC0
@@ -49,7 +52,53 @@
 
 #define DMA_MAX_TRANSFER_SIZE			0x10000
 
+#define DMA_MOD_REG_BIT_MOD1            0b10000000
+#define DMA_MOD_REG_BIT_MOD2            0b01000000
+#define DMA_MOD_REG_BIT_DOWN            0b00100000
+#define DMA_MOD_REG_BIT_AUTO            0b00010000
+#define DMA_MOD_REG_BIT_TRA1            0b00001000
+#define DMA_MOD_REG_BIT_TRA0            0b00000100
+#define DMA_MOD_REG_BIT_SEL1            0b00000010
+#define DMA_MOD_REG_BIT_SEL0            0b00000001
+
+#define DMA_MOD_REG_MOD_ON_DEMAND       0b00000000
+#define DMA_MOD_REG_MOD_SINGLE          0b01000000
+#define DMA_MOD_REG_MOD_BLOCK           0b10000000
+#define DMA_MOD_REG_MOD_CASCADE         0b11000000
+
+#define DMA_MOD_REG_SEL_0               0b00000000
+#define DMA_MOD_REG_SEL_1               0b00000001
+#define DMA_MOD_REG_SEL_2               0b00000010
+#define DMA_MOD_REG_SEL_3               0b00000011
+
+#define DMA_MOD_REG_TRA_TEST            0b00000000
+#define DMA_MOD_REG_TRA_WRITE_MEM       0b00000100
+#define DMA_MOD_REG_TRA_READ_MEM        0b00001000
+#define DMA_MOD_REG_TRA_INVLID          0b00001100
+
+//FLOPPY
+
+#define FLOPPY_HPC                      2
+#define FLOPPY_SPT                      18
+#define FLOPPY_CYL                      80
+
+#define FLOPPY_STATUS_REG_A_IO          0x3F0 //Read Only
+#define FLOPPY_STATUS_REG_B_IO          0x3F1 //Read Only
+#define FLOPPY_DIGITAL_OUTPUT_REG_IO    0x3F2
+#define FLOPPY_TAPE_DRIVE_REG_IO        0x3F3
+#define FLOPPY_MAIN_STATUS_REG_IO       0x3F4 //Read Only
+#define FLOPPY_DATARATE_SELECT_REG_IO   0x3F4 //Write Only
+#define FLOPPY_DATA_FIFO_IO             0x3F5
+#define FLOPPY_DIGITAL_INPUT_REG_IO     0x3F7 //Read Only
+#define FLOPPY_CONF_CONTROL_REG_IO      0x3F7 //Write Only
+
 void init_floppy_DMA(uint16_t addr, uint16_t count);
 
+void init_DMA_floppy_write();
+
+void init_DMA_floppy_read();
+
+void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector);
+void floppy_init();
 
 #endif
