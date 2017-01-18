@@ -6,3 +6,4 @@ bootload.sym
 *.bat
 *.save
 *.save.*
+*.tmp

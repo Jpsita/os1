@@ -10,5 +10,7 @@
 #define KEY_SHIFT 15
 
 extern char scancode_tbl[];
+extern char scancode_tbl_shift[];
+
 #endif
 

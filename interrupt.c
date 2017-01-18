@@ -120,7 +120,8 @@ void handle_irq_1(){
 		return;
 	}
 	if(x >= 128){
-		x = inb(0x60);
+		char k = scancodeToAscii(x - 128);
+		parseKeyOff(k);
 		return;
 	}
 	//if(x == 0xE0){
@@ -130,13 +131,7 @@ void handle_irq_1(){
 	//print_hex(x);
 	//printCharacter(' ');
 	char k = scancodeToAscii(x);
-	if(k == NULL){
-		printString(" 0x");
-		print_hex(x);
-		printCharacter(' ');
-		return;
-	}
-	printCharacter(k);
+	parseKey(k);
 }
 
 void zero_IDT(IDTDescr * idt){

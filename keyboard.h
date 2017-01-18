@@ -18,8 +18,14 @@
 #define PS2_ACK			0xFA
 #define PS2_RSD			0xFE
 
+#define STATUS_BIT_SHIFT 0x1
+#define STATUS_BIT_CTRL 0x2
+
+int isShift();
+int isCtrl();
 
 void parseKey(short int key);
+void parseKeyOff(short int key);
 
 char scancodeToAscii(unsigned char sc);
 
