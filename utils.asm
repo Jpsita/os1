@@ -7,7 +7,7 @@ extern PIC_sendEOI
 ; FUNCTION inb 
 global inb
 inb:
-	XOR AX, AX
+	XOR EAX, EAX
 inb_debug2:
 	ENTER 0, 0
 	MOV EDX, [EBP + 8]
@@ -136,18 +136,6 @@ double_fault_HNDLR_exit:
 	
 ;----------END----------
 	
-;----------FUN---------
-; FUNCTION fault_HNDLR
-; params: 0 default 0 value for double faults.
-;----------------------
-extern c_flt
-global fault_HNDLR
-fault_HNDLR:
-	CALL	c_flt
-fault_HNDLR_exit:
-	IRET
-	
-;----------END----------
 
 ;----------FUN---------
 ; FUNCTION d_b_0_HNDLR
@@ -204,3 +192,17 @@ protection_fault_HNDLR_exit:
 	IRET
 
 ;----------END----------
+
+global PIC_timer
+PIC_timer:
+	IRET
+	
+global util_cli
+util_cli:
+	CLI
+	RET
+	
+global util_sti
+util_sti:
+	STI
+	RET

@@ -4,3 +4,5 @@ temp/
 bootload.bin
 bootload.sym
 *.bat
+*.save
+*.save.*

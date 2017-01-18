@@ -17,5 +17,9 @@ void segment_fault_HNDLR();
 void stack_fault_HNDLR();
 void overflow_fault_HNDLR();
 void protection_fault_HNDLR();
+void PIC_timer();
+
+void util_cli();
+void util_sti();
 
 #endif

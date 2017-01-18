@@ -10,7 +10,7 @@ void entryc(){
 	printString("Hello fools!!\n");
 	//printString("TEST_3\n");
 	while(1){
-		char c = getCh();
-		printCharacter(c);
+		//char c = getCh();
+		//printCharacter(c);
 	}
 }

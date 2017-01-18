@@ -9,6 +9,6 @@
 #define KEY_CTRL 11
 #define KEY_SHIFT 15
 
-extern char scancode_tbl_it[];
+extern char scancode_tbl[];
 #endif
 

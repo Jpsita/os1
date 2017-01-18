@@ -13,17 +13,72 @@ void PIC_sendEOI(unsigned char IRQ){
 }
 
 void c_dbl_flt(){
-	printString("Double Fault!\n");
+	printString("FAULT: DOBULE FAULT. IRRECOVERABLE ERROR. Press any key to reset. (Coming Soon)\n");
 	while(1){
 		
 	}
 }
 
-void c_flt(){
-	printString("Fault!\n");
-	while(1){
-		
+void print_hex(uint32_t val){
+	static char str[9];
+	str[9] = 0;
+	for(int i = 0; i  < 8;  i++){
+		uint32_t cv = val % 0x10;
+		val = val >> 4;
+		switch(cv){
+		case 0x00:
+			str[7-i] = '0';
+			break;
+		case 0x01:
+			str[7-i] = '1';
+			break;
+		case 0x02:
+			str[7-i] = '2';
+			break;
+		case 0x03:
+			str[7-i] = '3';
+			break;
+		case 0x04:
+			str[7-i] = '4';
+			break;
+		case 0x05:
+			str[7-i] = '5';
+			break;
+		case 0x06:
+			str[7-i] = '6';
+			break;
+		case 0x07:
+			str[7-i] = '7';
+			break;
+		case 0x08:
+			str[7-i] = '8';
+			break;
+		case 0x09:
+			str[7-i] = '9';
+			break;
+		case 0x0A:
+			str[7-i] = 'A';
+			break;
+		case 0x0B:
+			str[7-i] = 'B';
+			break;
+		case 0x0C:
+			str[7-i] = 'C';
+			break;
+		case 0x0D:
+			str[7-i] = 'D';
+			break;
+		case 0x0E:
+			str[7-i] = 'E';
+			break;
+		case 0x0F:
+			str[7-i] = 'F';
+			break;
+		default:
+			str[7-i] = '?';
+		}
 	}
+	printString(str);
 }
 
 void PIC_remap(int offset1, int offset2){
@@ -56,8 +111,31 @@ void PIC_remap(int offset1, int offset2){
 }
 
 void handle_irq_1(){
+	unsigned char status = inb(0x64);
+	if(!(status & 0x01)){
+		return;
+	}
 	unsigned char x = inb(0x60);
+	if(x == 0xFA){
+		return;
+	}
+	if(x >= 128){
+		x = inb(0x60);
+		return;
+	}
+	//if(x == 0xE0){
+	//x = inb(0x60);
+	//return;
+	//}
+	//print_hex(x);
+	//printCharacter(' ');
 	char k = scancodeToAscii(x);
+	if(k == NULL){
+		printString(" 0x");
+		print_hex(x);
+		printCharacter(' ');
+		return;
+	}
 	printCharacter(k);
 }
 
@@ -104,6 +182,8 @@ void protection_fault(){
 	}
 }
 
+
+
 void fill_IDT_entry(uint16_t vector, uint32_t address, uint16_t trap){
 	IDT[vector].offset_1 = (uint16_t) address;
 	IDT[vector].offset_2 = (uint16_t) ((address) >> 16);
@@ -132,8 +212,14 @@ void create_IDT(){
 	fill_IDT_entry(0x09, stf_addr, 0);
 	uint32_t irq_addr =(uint32_t) &irq_1;
 	fill_IDT_entry(0x0D, (uint32_t) &protection_fault_HNDLR, 0);
-	fill_IDT_entry(0x20, irq_addr, 1);
+	fill_IDT_entry(0x20, (uint32_t) &PIC_timer, 1);
+	fill_IDT_entry(0x21, irq_addr, 1);
 	uint32_t dfh_addr = (uint32_t) &double_fault_HNDLR;
 	fill_IDT_entry(0x08, dfh_addr, 0);
 	load_IDT((uint32_t) &p);
+	init_keyboard();
+	outb(PIC1_DATA, 0xfd);
+	outb(PIC2_DATA, 0xff);
+	
+	
 }

@@ -48,6 +48,8 @@ typedef struct __attribute__ ((packed)) {
 	uint32_t address;
 } IDTPointer;
 
+void print_hex(uint32_t val);
+
 
 
 #endif
