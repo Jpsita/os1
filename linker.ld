@@ -46,6 +46,11 @@ SECTIONS
 		build/main.o(.bss);
 		build/main.o(.rodata);
 		build/main.o(.rel.text);
+		build/floppy.o(.text);
+		build/floppy.o(.data);
+		build/floppy.o(.bss);
+		build/floppy.o(.rodata);
+		build/floppy.o(.rel.text);
 	}
 	. = 0x011200;
 	.eh_frame : AT(0x11200) {

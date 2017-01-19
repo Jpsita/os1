@@ -50,6 +50,7 @@ typedef struct __attribute__ ((packed)) {
 
 void print_hex(uint32_t val);
 
-
+void disable_echo();
+void enable_echo();
 
 #endif

@@ -18,6 +18,7 @@ void stack_fault_HNDLR();
 void overflow_fault_HNDLR();
 void protection_fault_HNDLR();
 void PIC_timer();
+void floppy_HNDLR();
 
 void util_cli();
 void util_sti();

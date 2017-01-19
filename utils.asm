@@ -7,7 +7,7 @@ extern PIC_sendEOI
 ; FUNCTION inb 
 global inb
 inb:
-	XOR EAX, EAX
+	MOV EAX, 0
 inb_debug2:
 	ENTER 0, 0
 	MOV EDX, [EBP + 8]
@@ -206,3 +206,11 @@ global util_sti
 util_sti:
 	STI
 	RET
+
+extern handle_irq_6
+global floppy_HNDLR
+floppy_HNDLR:
+	PUSHAD
+	CALL handle_irq_6
+	POPAD
+	IRET

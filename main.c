@@ -3,12 +3,16 @@
 #include "video.h"
 #include "utils.h"
 #include "interrupt.h"
+#include "floppy.h"
 
 void entryc(){
+	printString("Loading IDT and basic interrupt routines...\n");
 	PIC_remap(0x20, 0x28);
 	create_IDT();
-	printString("Hello fools!!\n");
-	//printString("TEST_3\n");
+	printString("Loading Floppy and ISA DMA...\n");
+	floppy_init();
+	printString("Basic Functionality Ready.\n");
+	//enable_echo();
 	while(1){
 		//char c = getCh();
 		//printCharacter(c);

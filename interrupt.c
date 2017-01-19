@@ -4,6 +4,7 @@
 #include "video.h"
 
 IDTDescr IDT[256];
+char echo_byte;
 
 void PIC_sendEOI(unsigned char IRQ){
 	if(IRQ >= 8){
@@ -121,7 +122,8 @@ void handle_irq_1(){
 	}
 	if(x >= 128){
 		char k = scancodeToAscii(x - 128);
-		parseKeyOff(k);
+		if(echo_byte != 0)
+			parseKeyOff(k);
 		return;
 	}
 	//if(x == 0xE0){
@@ -131,8 +133,11 @@ void handle_irq_1(){
 	//print_hex(x);
 	//printCharacter(' ');
 	char k = scancodeToAscii(x);
-	parseKey(k);
+	if(echo_byte != 0)
+		parseKey(k);
 }
+
+
 
 void zero_IDT(IDTDescr * idt){
 	idt->offset_1 = 0;
@@ -197,7 +202,7 @@ void create_IDT(){
 	for(int i = 0; i < 256; i++){
 		zero_IDT(&IDT[i]);
 	}
-	
+	echo_byte = 0;
 	uint32_t db0_addr = (uint32_t) &d_b_0_HNDLR;
 	fill_IDT_entry(0x00, db0_addr, 0);
 	fill_IDT_entry(0x4, (uint32_t) &overflow_fault_HNDLR, 0);
@@ -211,10 +216,19 @@ void create_IDT(){
 	fill_IDT_entry(0x21, irq_addr, 1);
 	uint32_t dfh_addr = (uint32_t) &double_fault_HNDLR;
 	fill_IDT_entry(0x08, dfh_addr, 0);
+	uint32_t floppy_addr = (uint32_t) &floppy_HNDLR;
+	fill_IDT_entry(0x26, floppy_addr, 0);
 	load_IDT((uint32_t) &p);
 	init_keyboard();
-	outb(PIC1_DATA, 0xfd);
+	
+	outb(PIC1_DATA, 0x10111101);
 	outb(PIC2_DATA, 0xff);
-	
-	
+}
+
+void disable_echo(){
+	echo_byte = 0;
+}
+
+void enable_echo(){
+	echo_byte = 1;
 }
