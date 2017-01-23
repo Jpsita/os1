@@ -218,11 +218,13 @@ void create_IDT(){
 	fill_IDT_entry(0x08, dfh_addr, 0);
 	uint32_t floppy_addr = (uint32_t) &floppy_HNDLR;
 	fill_IDT_entry(0x26, floppy_addr, 0);
+	uint32_t rtc_addr = (uint32_t) &rtc_HNDLR;
+	fill_IDT_entry(0x28, rtc_addr, 0);
 	load_IDT((uint32_t) &p);
 	init_keyboard();
-	
+
 	outb(PIC1_DATA, 0x10111101);
-	outb(PIC2_DATA, 0xff);
+	outb(PIC2_DATA, 0x11111110);
 }
 
 void disable_echo(){

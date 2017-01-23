@@ -154,5 +154,6 @@ void floppy_read(uint32_t lba, uint16_t bytecount, void* targetAddress){
 
 void handle_irq_6(){
 	handled_irq = 1;
+	PIC_sendEOI(0x06);
 }
 

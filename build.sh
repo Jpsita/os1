@@ -37,6 +37,7 @@ gcc -c video.c -o "build/video.o" -m32 -mtune=i386 -gdwarf
 gcc -c -S video.c -o "build/video.list" -m32 -mtune=i386 -gdwarf
 gcc -c interrupt.c -o "build/interrupt.o" -m32 -mtune=i386 -gdwarf
 gcc -c floppy.c -o "build/floppy.o" -m32 -mtune=i386 -gdwarf
+gcc -c rtc.c -o "build/rtc.o" -m32 -mtune=i386 -gdwarf
 if [ "${ML}" == "CH" ]
 then
 	echo - Using CH Keyboard Layout

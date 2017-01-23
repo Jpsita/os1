@@ -196,16 +196,22 @@ protection_fault_HNDLR_exit:
 global PIC_timer
 PIC_timer:
 	IRET
-	
+
+;----------END----------
+
 global util_cli
 util_cli:
 	CLI
 	RET
-	
+
+;----------END----------
+
 global util_sti
 util_sti:
 	STI
 	RET
+
+;----------END----------
 
 extern handle_irq_6
 global floppy_HNDLR
@@ -214,3 +220,15 @@ floppy_HNDLR:
 	CALL handle_irq_6
 	POPAD
 	IRET
+
+;----------END----------
+
+extern handle_irq_8
+global rtc_HNDLR
+rtc_HNDLR:
+	PUSHAD
+	CALL handle_irq_8
+	POPAD
+	IRET
+
+;----------END----------

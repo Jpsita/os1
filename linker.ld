@@ -46,6 +46,11 @@ SECTIONS
 		build/main.o(.bss);
 		build/main.o(.rodata);
 		build/main.o(.rel.text);
+		build/rtc.o(.text);
+		build/rtc.o(.data);
+		build/rtc.o(.bss);
+		build/rtc.o(.rodata);
+		build/rtc.o(.rel.text);
 		build/floppy.o(.text);
 		build/floppy.o(.data);
 		build/floppy.o(.bss);
