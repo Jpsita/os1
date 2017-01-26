@@ -11,23 +11,17 @@
  {
     outb(0x70, inb(0x70)|0x80);
  }
-unsigned long long int exTime = 0;
 unsigned long long int time = 0;
 
 void handle_irq_8(){
-	if(time == ~0LL){
-		exTime++;
-		time = 0;
-	}else{
-		time ++;
-	}
+	time ++;
 	outb(RTC_SELECT_PORT, RTC_REG_C);
 	inb(RTC_DATA_PORT);
 	PIC_sendEOI(0x08);
 }
 
 unsigned long long int getTime(){
-	return (time / 1024) + (exTime << 54);
+	return (time / 1024);
 }
 
 void sleepMs(unsigned long int ms){

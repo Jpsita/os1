@@ -127,6 +127,7 @@
 
 #define FLOPPY_CMD_WRITE_DATA			5
 #define FLOPPY_CMD_READ_DATA			6
+#define FLOPPY_CMD_RW_PARAM_GAP1		0x1b
 //Uses parameters
 //First parameter = head_number << 2 | active drive number
 //Second parameter = cylinder number
@@ -216,12 +217,13 @@
 #define FLOPPY_CMD_OPTION_MF			0x40
 #define FLOPPY_CMD_OPTION_SK			0x20
 
-void init_floppy_DMA(uint16_t addr, uint16_t count);
+void init_floppy_DMA(uint32_t addr, uint16_t count);
 
-void init_DMA_floppy_write();
+void init_DMA_floppy_write(uint16_t count);
 
-void init_DMA_floppy_read();
+void init_DMA_floppy_read(uint16_t count);
 
+void floppy_read(uint32_t lba, uint16_t byteCount, uint8_t* outAddr);
 void handle_irq_6();
 void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector);
 void floppy_init();

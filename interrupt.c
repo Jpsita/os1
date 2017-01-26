@@ -22,7 +22,7 @@ void c_dbl_flt(){
 
 void print_hex(uint32_t val){
 	static char str[9];
-	str[9] = 0;
+	str[8] = 0;
 	for(int i = 0; i  < 8;  i++){
 		uint32_t cv = val % 0x10;
 		val = val >> 4;
@@ -223,8 +223,8 @@ void create_IDT(){
 	load_IDT((uint32_t) &p);
 	init_keyboard();
 
-	outb(PIC1_DATA, 0x10111101);
-	outb(PIC2_DATA, 0x11111110);
+	outb(PIC1_DATA, 0b10111001);
+	outb(PIC2_DATA, 0xFE);
 }
 
 void disable_echo(){
