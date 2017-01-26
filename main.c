@@ -21,6 +21,8 @@ void entryc(){
 	printString("Starting test read...\n");
 	floppy_read(0, 512, tmpBuf);
 	printString("Test Read Complete.\n");
+	printString((char*) tmpBuf + 3);
+	enable_echo();
 	while(1){
 		//char c = getCh();
 		//printCharacter(c);

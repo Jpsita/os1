@@ -15,6 +15,7 @@ extern entryc
 global _main
 _main:
 	JMP startup		;moving to actual startup code
+tst			db		'Floppy Test',10, 0
 
 ;--------FUN---------------
 ; FUNCTION print_int32: prints a 32 bit HEXADECIMAL number

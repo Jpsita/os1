@@ -41,7 +41,6 @@ void newLine(){
 
 
 void deleteCurrentChar(){
-	printCharacterAtPos(NULL, COLOR_WHITE_BLACK, posX, posY);
 	posX--;
 	if(posX < 0){
 		posX = 79;
@@ -51,6 +50,8 @@ void deleteCurrentChar(){
 			posX = 0;
 		}
 	}
+	printCharacterAtPos(NULL, COLOR_WHITE_BLACK, posX, posY);
+
 }
 
 void printString(char * s){
