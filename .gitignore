@@ -7,3 +7,4 @@ bootload.sym
 *.save
 *.save.*
 *.tmp
+*.txt
