@@ -1,6 +1,9 @@
 build/
 temp/
+images/
+mountpoint
 *.log
+bootload.img
 bootload.bin
 bootload.sym
 *.bat

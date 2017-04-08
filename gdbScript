@@ -1,4 +1,5 @@
-symbol-file build/bootload.elf
+add-symbol-file loader/symbols/bootloader.sym 0x7C00
+add-symbol-file kernel/symbols/kernel.sym 0xBE00
 target remote :1234
 # directory ~/devel/os1
 set disassembly-flavor intel

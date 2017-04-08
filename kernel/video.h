@@ -18,5 +18,8 @@ void printString(char * s);
 
 void printCharacter(char chr);
 
+void updateCursorPos();
+
+void loadVideoPort();
 
 #endif

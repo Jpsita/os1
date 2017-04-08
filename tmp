@@ -1,0 +1,79 @@
+CHS:
+
+eff_2_chs:
+	;cylinder
+	PUSH EBP					;saving ebp
+	MOV EBP, EAX				;using ebp as backup LBA
+	XOR EDX, EDX				;zeroing EDX
+	MOV EBX, 2 * FLOPPY_144_SECTORS_PER_TRACK	;by EBX (36)
+	DIV EBX						;= (in EAX, leftover in EDX)
+	PUSH EAX					;push result (cylinder)
+eff_2_div_1:
+	;head
+	XOR EDX, EDX				;zeroing leftover
+	MOV EAX, EBP				;reloading LBA
+	MOV EBX, FLOPPY_144_SECTORS_PER_TRACK ; divide EAX by EBX(18)
+	DIV EBX						;= (in EAX, leftover in EDX)
+	XOR EDX, EDX				;zeroing leftover
+	MOV EBX, 2					;number of HEADS
+	DIV EBX						;= divide EAX vy EBX(2)
+	PUSH EDX					;save effective HEAD
+eff_2_div_2:
+	;sector
+	XOR EDX, EDX				;zeroing leftover
+	MOV EAX, EBP				;loading LBA
+	MOV EBX, FLOPPY_144_SECTORS_PER_TRACK ;divide EAX by EBX(18)
+	DIV EBX						;= (in EAX, leftover in EDX)
+eff_x:
+	MOV ECX, EDX				;put sector in ECX
+	INC ECX
+	POP EDX						;put head in EDX
+	POP EBX						;put cylinder in EBX
+	POP EBP						;restoring ebp
+	MOV [head], DL
+	MOV [track], BX
+	MOV [sector], CL
+eff_2_ret:
+	RET
+
+
+HCS:
+
+eff_2_chs:
+	;cylinder/track
+	PUSH EBP					;saving ebp
+	MOV EBP, EAX				;using ebp as backup LBA
+	XOR EDX, EDX				;zeroing EDX
+	MOV EBX, FLOPPY_144_SECTORS_PER_TRACK	;by EBX (18)
+	DIV EBX						;= (in EAX, leftover in EDX)
+	XOR EDX, EDX				;zeroing leftover
+	MOV EBX, 80					;cylinder per head
+	DIV EBX						;= (in EAX, leftover in EDX)
+	PUSH EDX					;push result (cylinder)
+eff_2_div_1:
+	;head
+	XOR EDX, EDX				;zeroing leftover
+	MOV EAX, EBP				;reloading LBA
+	MOV EBX, FLOPPY_144_SECTORS_PER_TRACK * 80 ; divide EAX by EBX(18 * 80)
+	DIV EBX						;= (in EAX, leftover in EDX)
+	PUSH EAX					;save effective HEAD
+eff_2_div_2:
+	;sector
+	XOR EDX, EDX				;zeroing leftover
+	MOV EAX, EBP				;loading LBA
+	MOV EBX, FLOPPY_144_SECTORS_PER_TRACK ;divide EAX by EBX(18)
+	DIV EBX						;= (in EAX, leftover in EDX)
+eff_x:
+	MOV ECX, EDX				;put sector in ECX
+	INC ECX
+	POP EDX						;put head in EDX
+	POP EBX						;put cylinder in EBX
+	POP EBP						;restoring ebp
+	MOV [head], DL
+	MOV [track], BX
+	MOV [sector], CL
+eff_2_ret:
+	RET
+
+
+

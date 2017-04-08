@@ -1,21 +1,13 @@
-ENTRY(_main);
+ENTRY(entryc);
 SECTIONS
 {
-
-	. = 0x7C00;
-	.init_code  :  AT(0x7C00) 	{
-		build/entry.o(.text);
-		build/entry.o(.tmpdata);
-	}
-	.sig : AT(0x7DFE) {
-		SHORT(0xaa55);
-	}
-	. = 0x7E00;
-	.data : AT(0x7E00) {
-		build/entry.o(.data);
-	}
-	. = 0x008000;
-	.text : AT(0x8000) {
+	. = 0xBE00;
+	.text : AT(0xBE00) {
+		build/main.o(.text);
+		build/main.o(.data);
+		build/main.o(.bss);
+		build/main.o(.rodata);
+		build/main.o(.rel.text);
 		build/utils.o(.text);
 		build/utils.o(.data);
 		build/utils.o(.bss);
@@ -41,11 +33,6 @@ SECTIONS
 		build/scancodes.o(.rodata);
 		build/scancodes.o(.bss);
 		build/scancodes.o(.rel.text);
-		build/main.o(.text);
-		build/main.o(.data);
-		build/main.o(.bss);
-		build/main.o(.rodata);
-		build/main.o(.rel.text);
 		build/rtc.o(.text);
 		build/rtc.o(.data);
 		build/rtc.o(.bss);
@@ -56,9 +43,19 @@ SECTIONS
 		build/floppy.o(.bss);
 		build/floppy.o(.rodata);
 		build/floppy.o(.rel.text);
+		build/fat.o(.text);
+		build/fat.o(.data);
+		build/fat.o(.bss);
+		build/fat.o(.rodata);
+		build/fat.o(.rel.text);
+		build/string.o(.text);
+		build/string.o(.data);
+		build/string.o(.bss);
+		build/string.o(.rodata);
+		build/string.o(.rel.text);
 	}
-	. = 0x011200;
-	.eh_frame : AT(0x11200) {
+	. = 0x021200;
+	.eh_frame : AT(0x21200) {
 		*.*(.eh_frame);
 	}
 	

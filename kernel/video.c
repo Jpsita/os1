@@ -1,9 +1,34 @@
 #include "video.h"
 #include "main.h"
+#include "utils.h"
+
+#define VGA_INDEX_REGISTER_PORT		0x000
+#define VGA_INDEX_COMMAND_PORT		0x001
+
+#define VGA_INDEX_LOW_PORT			0x0F
+#define VGA_INDEX_HIGH_PORT			0x0E
+
+unsigned short video_base;
 
 char * videoMem = (char * ) 0x000B8000;
 int posX = 0;
 int posY = 0;
+
+void loadVideoPort(){
+	video_base = *(unsigned short*)(0x0463);
+}
+
+void updateCursor(){
+	unsigned short cursorPos = (posY * 80) + posX;
+
+	//Low part
+	outb(video_base + VGA_INDEX_REGISTER_PORT, VGA_INDEX_LOW_PORT);
+	outb(video_base + VGA_INDEX_COMMAND_PORT, (unsigned char)((cursorPos)&0xFF));
+
+	//High Part
+	outb(video_base + VGA_INDEX_REGISTER_PORT, VGA_INDEX_HIGH_PORT);
+	outb(video_base + VGA_INDEX_COMMAND_PORT, (unsigned char)((cursorPos >> 8)&0xFF));
+}
 
 void printCharacterAtPos(char c, char color, int x, int y){
 	char * tmp = videoMem;
@@ -11,6 +36,7 @@ void printCharacterAtPos(char c, char color, int x, int y){
 	tmp += (x * 2);
 	*tmp++ = c;
 	*tmp = color;
+	updateCursor();
 }
 
 void clearScreen(){
@@ -20,6 +46,7 @@ void clearScreen(){
 		*tmp++ = 0;
 		*tmp++ = COLOR_WHITE_BLACK;
 	}
+	updateCursor();
 }
 
 void printTab(){
@@ -27,6 +54,7 @@ void printTab(){
 	if(posX >= 80){
 		posX = 79;
 	}
+	updateCursor();
 }
 
 void newLine(){
@@ -36,6 +64,7 @@ void newLine(){
 		clearScreen();
 		posY = 0;
 	}
+	updateCursor();
 }
 
 
@@ -72,6 +101,7 @@ void printString(char * s){
 			newLine();
 		}
 	}
+	updateCursor();
 }
 
 void printCharacter(char chr){
@@ -85,4 +115,5 @@ void printCharacter(char chr){
 			posY = 0;
 		}
 	}
+	updateCursor();
 }
