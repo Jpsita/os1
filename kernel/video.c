@@ -117,3 +117,72 @@ void printCharacter(char chr){
 	}
 	updateCursor();
 }
+
+void printHex(uint32_t val){
+	switch(val){
+		case 0:
+		printCharacter('0');
+		break;
+		case 0x1:
+		printCharacter('1');
+		break;
+		case 0x2:
+		printCharacter('2');
+		break;
+		case 0x3:
+		printCharacter('3');
+		break;
+		case 0x4:
+		printCharacter('4');
+		break;
+		case 0x5:
+		printCharacter('5');
+		break;
+		case 0x6:
+		printCharacter('6');
+		break;
+		case 0x7:
+		printCharacter('7');
+		break;
+		case 0x8:
+		printCharacter('8');
+		break;
+		case 0x9:
+		printCharacter('9');
+		break;
+		case 0xA:
+		printCharacter('A');
+		break;
+		case 0xB:
+		printCharacter('B');
+		break;
+		case 0xC:
+		printCharacter('C');
+		break;
+		case 0xD:
+		printCharacter('D');
+		break;
+		case 0xE:
+		printCharacter('E');
+		break;
+		case 0xF:
+		printCharacter('F');
+		break;
+		
+	}
+}
+
+void printUint32(uint32_t val){
+	printString("0x");
+	uint32_t i = 28;
+	uint32_t mask = 0x0000000F;
+	while(i != 0){
+		uint32_t vl = val >> i;
+		vl &= mask;
+		i-= 4;
+		if(vl != 0)
+			printHex(vl);
+	}
+	uint32_t vl = val & mask;
+	printHex(vl);
+}

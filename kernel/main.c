@@ -7,37 +7,44 @@
 #include "rtc.h"
 #include "fat.h"
 
-extern uint8_t tmpBuf[];
 extern uint8_t fat[];
 extern uint8_t root_dir[];
+extern FAT_DIR_LN_ENTRY root_dir_entries[];
 
 void entryc(){
 	loadVideoPort();
-	printString("Loading IDT and basic interrupt routines...\n");
+	//printString("Loading IDT and basic interrupt routines...\n");
 	PIC_remap(0x20, 0x28);
 	create_IDT();
-	printString("Loading RTC...\n");
+	//printString("Loading RTC...\n");
 	init_RTC();
-	printString("Loading Floppy and ISA DMA...\n");
+	//printString("Loading Floppy and ISA DMA...\n");
 	floppy_init();
-	printString("Basic Functionality Ready.\n");
-	//enable_echo();
-	printString("Starting test read...\n");
-	floppy_read(0, 512, tmpBuf);
-	printString("Test Read Complete.\n");
-	printString("Loading FLOPPY FAT...\n");
+	//printString("Basic Functionality Ready.\n");
+
+	printString("os1 Booting...\n");
+	//printString("Loading FLOPPY FAT...\n");
 	FAT_IMPL fatImpl = initializeFAT(1, fat, 18*512, root_dir, 240 * 32);
 	if(fatImpl.fat == 0){
 		printString("Error loading FAT. Buffer too small\n");
 	}
-	printString("Read done!\n");
+	printString("Reading directory '/':\n");
+	uint16_t n_ent = listFilesFAT(&fatImpl, "/", root_dir_entries, 240);
+	for(uint16_t i = 0; i < n_ent; i++){
+		printString("    ");
+		printString(root_dir_entries[i].long_name);
+		printString("    ");
+		printUint32(root_dir_entries[i].cluster);
+		printString("\n");
+	}
+	printString("Loading Shell...\n");
 	enable_echo();
 	while(1){
 		//char c = getCh();
-		//printCharacter(c);
+		//printCharacterRead (c);
 	}
 }
 
-uint8_t tmpBuf[1024];
 uint8_t fat[18 * 512];
 uint8_t root_dir[240 * 32];
+FAT_DIR_LN_ENTRY	root_dir_entries[240];

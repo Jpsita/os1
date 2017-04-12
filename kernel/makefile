@@ -5,7 +5,7 @@ build/kernel.rnb: build/kernel.elf
 symbols/kernel.sym: build/kernel.elf
 	objcopy --only-keep-debug "build/kernel.elf" "symbols/kernel.sym"
 build/kernel.elf: build/utils.o build/main.o build/video.o build/keyboard.o build/string.o build/fat.o build/interrupt.o build/floppy.o build/rtc.o build/scancodes.o kernel.ld
-	ld -Tkernel.ld -m elf_i386 --nmagic -nostdlib -static -o "build/kernel.elf"
+	ld -Tkernel.ld -m elf_i386 --nmagic -nostdlib -static -o "build/kernel.elf" -Map symbols/kernel.map
 build/utils.o : utils.asm
 	nasm -g -felf32 -F dwarf utils.asm -o "build/utils.o"
 build/main.o : main.c keyboard.h video.h utils.h interrupt.h floppy.h rtc.h
@@ -22,7 +22,7 @@ build/rtc.o : rtc.c rtc.h utils.h interrupt.h
 	gcc -c rtc.c -o "build/rtc.o" -m32 -mtune=i386 -gdwarf
 build/scancodes.o : scancodes.c scancodes.h
 	gcc -c scancodes.c -o "build/scancodes.o" -m32 -mtune=i386 -DKEYB_TYPE_CH -gdwarf
-build/fat.o: fat.c fat.h
+build/fat.o: fat.c fat.h string.h
 	gcc -c fat.c -o "build/fat.o" -m32 -mtune=i386 -gdwarf
 build/string.o: string.c string.h
 	gcc -c string.c -o "build/string.o" -m32 -mtune=i386 -gdwarf

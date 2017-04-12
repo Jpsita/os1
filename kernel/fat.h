@@ -34,8 +34,11 @@ typedef struct __attribute__ ((packed)){
 } FAT_IMPL;
 
 typedef struct __attribute__ ((packed)){
-	uint8_t*	long_name;
-	uint8_t*	file_info;
+	uint8_t		long_name[64];
+	uint8_t		attributes;
+	uint16_t	cluster;
+	uint16_t	n_entries;
+	void*		entries[240];
 } FAT_DIR_LN_ENTRY;
 
 typedef struct __attribute__ ((packed)){
@@ -44,7 +47,7 @@ typedef struct __attribute__ ((packed)){
 	uint8_t	attribute;
 	uint8_t type;
 	uint8_t checksum;
-	uint16_t name2[12];
+	uint16_t name2[6];
 	uint16_t zero;
 	uint16_t name3[2];
 } FAT_LONG_NAME;
@@ -53,6 +56,7 @@ typedef struct __attribute__ ((packed)){
 	uint8_t name[8];
 	uint8_t extension[3];
 	uint8_t attributes;
+	uint8_t reserved;
 	uint8_t creation_time_ts;
 	uint16_t creation_time;
 	uint16_t creation_date;
@@ -64,9 +68,10 @@ typedef struct __attribute__ ((packed)){
 	uint32_t size;
 } FAT_ENTRY;
 
+
 FAT_IMPL initializeFAT(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBuffetrSize);
 
-
+uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, uint16_t num_entries);
 
 
 #endif

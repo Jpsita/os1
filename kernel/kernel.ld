@@ -4,10 +4,6 @@ SECTIONS
 	. = 0xBE00;
 	.text : AT(0xBE00) {
 		build/main.o(.text);
-		build/main.o(.data);
-		build/main.o(.bss);
-		build/main.o(.rodata);
-		build/main.o(.rel.text);
 		build/utils.o(.text);
 		build/utils.o(.data);
 		build/utils.o(.bss);
@@ -53,6 +49,10 @@ SECTIONS
 		build/string.o(.bss);
 		build/string.o(.rodata);
 		build/string.o(.rel.text);
+		build/main.o(.data);
+		build/main.o(.bss);
+		build/main.o(.rodata);
+		build/main.o(.rel.text);
 	}
 	. = 0x021200;
 	.eh_frame : AT(0x21200) {
