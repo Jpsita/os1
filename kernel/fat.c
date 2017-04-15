@@ -125,7 +125,7 @@ uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, ui
 		uint8_t pth[64];
 		pth[0] = 0;
 		substr(path, pth, 1, pos);
-		printCharacter('>Looking for ');
+		printString(">Looking for ");
 		printString(pth);
 		printString(": ");
 		for(int i = 0; i < n_entries; i++){

@@ -3,7 +3,9 @@
 
 #include "main.h"
 
-typedef struct  __attribute__ ((packed)){
+
+
+typedef struct  PACKED{
 	uint8_t		jump[3];
 	uint8_t		OEM[8];
 	uint16_t 	bytes_per_sector;
@@ -26,7 +28,7 @@ typedef struct  __attribute__ ((packed)){
 	uint8_t		fat_type[8];
 }FAT_INFO;
 
-typedef struct __attribute__ ((packed)){
+typedef struct PACKED{
 	uint8_t*	fat;
 	uint8_t*	root_directory;
 	uint16_t	fat_size;
@@ -34,7 +36,7 @@ typedef struct __attribute__ ((packed)){
 	uint16_t 	data_offset_secs;
 } FAT_IMPL;
 
-typedef struct __attribute__ ((packed)){
+typedef struct PACKED{
 	uint8_t		long_name[64];
 	uint8_t		attributes;
 	uint16_t	cluster;
@@ -42,7 +44,7 @@ typedef struct __attribute__ ((packed)){
 	void*		entries[240];
 } FAT_DIR_LN_ENTRY;
 
-typedef struct __attribute__ ((packed)){
+typedef struct PACKED{
 	uint8_t index;
 	uint16_t name[5];
 	uint8_t	attribute;
@@ -53,7 +55,7 @@ typedef struct __attribute__ ((packed)){
 	uint16_t name3[2];
 } FAT_LONG_NAME;
 
-typedef struct __attribute__ ((packed)){
+typedef struct PACKED{
 	uint8_t name[8];
 	uint8_t extension[3];
 	uint8_t attributes;

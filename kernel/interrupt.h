@@ -31,7 +31,7 @@ void create_IDT();
 void c_dbl_flt();
 
 
-typedef struct  __attribute__ ((packed)) {
+typedef struct  PACKED {
    uint16_t offset_1; // offset bits 0..15
    uint16_t selector; // a code segment selector in GDT or LDT
    uint8_t zero;      // unused, set to 0
@@ -43,7 +43,7 @@ extern IDTDescr IDT[];
 
 void zero_IDT(IDTDescr * descr);
 
-typedef struct __attribute__ ((packed)) {
+typedef struct PACKED {
 	uint16_t length;
 	uint32_t address;
 } IDTPointer;

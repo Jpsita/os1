@@ -21,7 +21,7 @@ Linker script and memory map
 
                 0x000000000000be00                . = 0xbe00
 
-.text           0x000000000000be00     0x27b4
+.text           0x000000000000be00     0x27c4
  build/main.o(.text)
  .text          0x000000000000be00      0x180 build/main.o
                 0x000000000000be00                entryc
@@ -120,65 +120,66 @@ Linker script and memory map
                 0x000000000000d511                floppy_read
                 0x000000000000d876                handle_irq_6
  build/fat.o(.text)
- .text          0x000000000000d893      0x62c build/fat.o
+ .text          0x000000000000d893      0x62f build/fat.o
                 0x000000000000d893                initializeFAT
                 0x000000000000d9f1                readFatentry
                 0x000000000000da3f                loadFileFromCluster
                 0x000000000000daff                listFilesFAT
  build/string.o(.text)
- .text          0x000000000000debf      0x29d build/string.o
-                0x000000000000debf                strlen
-                0x000000000000dee2                strcmp
-                0x000000000000df6f                strcat
-                0x000000000000dfb7                strcat_n
-                0x000000000000e00f                strcat_nn
-                0x000000000000e06e                stradd
-                0x000000000000e0a2                strpos_s
-                0x000000000000e0e7                strpos
-                0x000000000000e107                substr
+ .text          0x000000000000dec2      0x29d build/string.o
+                0x000000000000dec2                strlen
+                0x000000000000dee5                strcmp
+                0x000000000000df72                strcat
+                0x000000000000dfba                strcat_n
+                0x000000000000e012                strcat_nn
+                0x000000000000e071                stradd
+                0x000000000000e0a5                strpos_s
+                0x000000000000e0ea                strpos
+                0x000000000000e10a                substr
  build/main.o(.data)
- .data          0x000000000000e15c        0x0 build/main.o
+ .data          0x000000000000e15f        0x0 build/main.o
  build/main.o(.bss)
- .bss           0x000000000000e15c        0x0 build/main.o
+ .bss           0x000000000000e15f        0x0 build/main.o
  build/main.o(.rodata)
- .rodata        0x000000000000e15c       0x6f build/main.o
+ *fill*         0x000000000000e15f        0x1 
+ .rodata        0x000000000000e160       0x6f build/main.o
  build/main.o(.rel.text)
- .rel.text      0x000000000000e1cb        0x0 build/main.o
+ .rel.text      0x000000000000e1cf        0x0 build/main.o
  build/utils.o(.data)
  build/utils.o(.bss)
  build/utils.o(.rodata)
  build/utils.o(.rel.text)
  build/video.o(.data)
- *fill*         0x000000000000e1cb        0x1 
- .data          0x000000000000e1cc        0x4 build/video.o
-                0x000000000000e1cc                videoMem
+ *fill*         0x000000000000e1cf        0x1 
+ .data          0x000000000000e1d0        0x4 build/video.o
+                0x000000000000e1d0                videoMem
  build/video.o(.bss)
- .bss           0x000000000000e1d0        0x8 build/video.o
-                0x000000000000e1d0                posX
-                0x000000000000e1d4                posY
+ .bss           0x000000000000e1d4        0x8 build/video.o
+                0x000000000000e1d4                posX
+                0x000000000000e1d8                posY
  build/video.o(.rodata)
- .rodata        0x000000000000e1d8       0x43 build/video.o
+ .rodata        0x000000000000e1dc       0x43 build/video.o
  build/video.o(.rel.text)
  build/interrupt.o(.data)
- .data          0x000000000000e21b        0x0 build/interrupt.o
+ .data          0x000000000000e21f        0x0 build/interrupt.o
  build/interrupt.o(.bss)
- *fill*         0x000000000000e21b        0x1 
- .bss           0x000000000000e21c        0x9 build/interrupt.o
+ *fill*         0x000000000000e21f        0x1 
+ .bss           0x000000000000e220        0x9 build/interrupt.o
  build/interrupt.o(.rodata)
- *fill*         0x000000000000e225        0x3 
- .rodata        0x000000000000e228      0x148 build/interrupt.o
+ *fill*         0x000000000000e229        0x3 
+ .rodata        0x000000000000e22c      0x148 build/interrupt.o
  build/interrupt.o(.rel.text)
  build/keyboard.o(.data)
- .data          0x000000000000e370        0x0 build/keyboard.o
+ .data          0x000000000000e374        0x0 build/keyboard.o
  build/keyboard.o(.bss)
- .bss           0x000000000000e370        0x1 build/keyboard.o
-                0x000000000000e370                KEYB_STATUS_BYTE
+ .bss           0x000000000000e374        0x1 build/keyboard.o
+                0x000000000000e374                KEYB_STATUS_BYTE
  build/keyboard.o(.rodata)
- *fill*         0x000000000000e371        0x3 
- .rodata        0x000000000000e374       0x70 build/keyboard.o
+ *fill*         0x000000000000e375        0x3 
+ .rodata        0x000000000000e378       0x70 build/keyboard.o
  build/keyboard.o(.rel.text)
  build/scancodes.o(.data)
- *fill*         0x000000000000e3e4       0x1c 
+ *fill*         0x000000000000e3e8       0x18 
  .data          0x000000000000e400       0xe5 build/scancodes.o
                 0x000000000000e400                scancode_tbl
                 0x000000000000e480                scancode_tbl_shift
@@ -208,12 +209,12 @@ Linker script and memory map
  .bss           0x000000000000e51b        0x0 build/fat.o
  build/fat.o(.rodata)
  *fill*         0x000000000000e51b        0x1 
- .rodata        0x000000000000e51c       0x98 build/fat.o
+ .rodata        0x000000000000e51c       0xa8 build/fat.o
  build/fat.o(.rel.text)
  build/string.o(.data)
- .data          0x000000000000e5b4        0x0 build/string.o
+ .data          0x000000000000e5c4        0x0 build/string.o
  build/string.o(.bss)
- .bss           0x000000000000e5b4        0x0 build/string.o
+ .bss           0x000000000000e5c4        0x0 build/string.o
  build/string.o(.rodata)
  build/string.o(.rel.text)
                 0x0000000000021200                . = 0x21200
@@ -295,25 +296,25 @@ OUTPUT(build/kernel.elf elf32-i386)
  .debug_line    0x0000000000000744       0xf5 build/fat.o
  .debug_line    0x0000000000000839       0xc9 build/string.o
 
-.debug_str      0x0000000000000000      0xa28
- .debug_str     0x0000000000000000      0x1be build/main.o
-                                        0x1ec (size before relaxing)
- .debug_str     0x00000000000001be       0xd1 build/video.o
-                                        0x1a9 (size before relaxing)
- .debug_str     0x000000000000028f      0x14c build/interrupt.o
-                                        0x272 (size before relaxing)
- .debug_str     0x00000000000003db       0xa5 build/keyboard.o
-                                        0x1b9 (size before relaxing)
- .debug_str     0x0000000000000480        0xc build/scancodes.o
-                                         0x93 (size before relaxing)
- .debug_str     0x000000000000048c       0x6f build/rtc.o
-                                        0x18c (size before relaxing)
- .debug_str     0x00000000000004fb      0x1a5 build/floppy.o
-                                        0x2fb (size before relaxing)
- .debug_str     0x00000000000006a0      0x2de build/fat.o
-                                        0x46d (size before relaxing)
- .debug_str     0x000000000000097e       0xaa build/string.o
-                                        0x194 (size before relaxing)
+.debug_str      0x0000000000000000      0xa32
+ .debug_str     0x0000000000000000      0x1c8 build/main.o
+                                        0x1f6 (size before relaxing)
+ .debug_str     0x00000000000001c8       0xd1 build/video.o
+                                        0x1b3 (size before relaxing)
+ .debug_str     0x0000000000000299      0x14c build/interrupt.o
+                                        0x27c (size before relaxing)
+ .debug_str     0x00000000000003e5       0xa5 build/keyboard.o
+                                        0x1c3 (size before relaxing)
+ .debug_str     0x000000000000048a        0xc build/scancodes.o
+                                         0x9d (size before relaxing)
+ .debug_str     0x0000000000000496       0x6f build/rtc.o
+                                        0x196 (size before relaxing)
+ .debug_str     0x0000000000000505      0x1a5 build/floppy.o
+                                        0x305 (size before relaxing)
+ .debug_str     0x00000000000006aa      0x2de build/fat.o
+                                        0x477 (size before relaxing)
+ .debug_str     0x0000000000000988       0xaa build/string.o
+                                        0x19e (size before relaxing)
 
 .comment        0x0000000000000000       0x1a
  .comment       0x0000000000000000       0x1a build/main.o
