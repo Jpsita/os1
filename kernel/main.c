@@ -10,6 +10,8 @@
 extern uint8_t fat[];
 extern uint8_t root_dir[];
 extern FAT_DIR_LN_ENTRY root_dir_entries[];
+extern FAT_DIR_LN_ENTRY test_dir_entries[];
+
 
 void entryc(){
 	loadVideoPort();
@@ -30,13 +32,18 @@ void entryc(){
 	}
 	printString("Reading directory '/':\n");
 	uint16_t n_ent = listFilesFAT(&fatImpl, "/", root_dir_entries, 240);
-	for(uint16_t i = 0; i < n_ent; i++){
-		printString("    ");
-		printString(root_dir_entries[i].long_name);
-		printString("    ");
-		printUint32(root_dir_entries[i].cluster);
-		printString("\n");
+	if(n_ent != 0xFFFF){
+		for(uint16_t i = 0; i < n_ent; i++){
+			printString("    ");
+			printString(root_dir_entries[i].long_name);
+			printString("    ");
+			printUint32(root_dir_entries[i].cluster);
+			printString("\n");
+		}
+		uint16_t n_ent_2 = listFilesFAT(&fatImpl, "/test/", test_dir_entries, 240);
 	}
+	//uint8_t* buff = (uint8_t*) 0xbe00 + (0x15 * 512);
+	//loadFileFromCluster(&fatImpl, 0x03, buff, 512 * 16);
 	printString("Loading Shell...\n");
 	enable_echo();
 	while(1){
@@ -48,3 +55,4 @@ void entryc(){
 uint8_t fat[18 * 512];
 uint8_t root_dir[240 * 32];
 FAT_DIR_LN_ENTRY	root_dir_entries[240];
+FAT_DIR_LN_ENTRY	test_dir_entries[240];

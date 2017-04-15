@@ -175,13 +175,16 @@ void printHex(uint32_t val){
 void printUint32(uint32_t val){
 	printString("0x");
 	uint32_t i = 28;
+	uint8_t printed = 0;
 	uint32_t mask = 0x0000000F;
 	while(i != 0){
 		uint32_t vl = val >> i;
 		vl &= mask;
 		i-= 4;
-		if(vl != 0)
+		if(vl != 0 || printed == 1){
 			printHex(vl);
+			printed = 1;
+		}
 	}
 	uint32_t vl = val & mask;
 	printHex(vl);

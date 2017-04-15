@@ -92,10 +92,23 @@ uint32_t strpos_s(uint8_t* string, uint8_t needle, uint32_t start){
 			return i;
 		}
 		i++;
+		ptr++;
 	}
 	return ~0;
 }
 
 uint32_t strpos(uint8_t* string, uint8_t needle){
 	return strpos_s(string, needle, 0);
+}
+
+uint32_t substr(uint8_t* string, uint8_t* buffer, uint32_t start, uint32_t end){
+	uint32_t i = start;
+	uint32_t chrs = 0;
+	while(string[i] != 0 && i < end){
+		buffer[chrs] = string[i];
+		chrs++;
+		i++;
+	}
+	buffer[chrs] = 0;
+	return chrs;
 }

@@ -28,10 +28,12 @@ images/floppy.img:
 install: kernel/build/kernel.rnb 
 	mount -o loop images/floppy.img ./mountpoint -t msdos
 	cp kernel/build/kernel.rnb mountpoint/kernel.rnb
+	mkdir mountpoint/test
 	sleep 2
 	umount ./mountpoint
 uninstall:
 	mount -o loop images/floppy.img ./mountpoint -t msdos
 	rm mountpoint/kernel.rnb
+	rm -r mountpoint/test
 	sleep 2
 	umount ./mountpoint

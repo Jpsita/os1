@@ -31,6 +31,7 @@ typedef struct __attribute__ ((packed)){
 	uint8_t*	root_directory;
 	uint16_t	fat_size;
 	uint16_t	root_dir_size;
+	uint16_t 	data_offset_secs;
 } FAT_IMPL;
 
 typedef struct __attribute__ ((packed)){
@@ -72,6 +73,6 @@ typedef struct __attribute__ ((packed)){
 FAT_IMPL initializeFAT(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBuffetrSize);
 
 uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, uint16_t num_entries);
-
+uint32_t loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, uint32_t bufferSize);
 
 #endif

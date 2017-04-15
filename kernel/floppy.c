@@ -156,7 +156,7 @@ void floppy_recalibrate(uint32_t disk){
 	outb(FLOPPY_DATA_FIFO_IO, disk);
 	floppy_waitForNextParam();
 	while(handled_irq == 0){
-		sleep(1);
+		sleepMs(500);
 	}
 	handled_irq = 0;
 
@@ -222,7 +222,7 @@ void floppy_stopMotor(uint32_t motorId){
 void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
 	init_DMA_floppy_read((((bytecount - (bytecount % 512)) + ((bytecount % 512 == 0) ? 0 : 1) * (512))) -1) ;
 	floppy_startMotor(0);
-	sleep(2);
+	sleep(1);
 	handled_irq = 0;
 	uint16_t cyl;
 	uint16_t head;
