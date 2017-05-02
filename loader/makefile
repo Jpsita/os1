@@ -9,8 +9,8 @@ build/bootloader.o: entry.asm
 build/bootloader.elf: build/bootloader.o
 	ld -Tloader.ld -m elf_i386 --nmagic -nostdlib -static -o "build/bootloader.elf" -Map symbols/loader.map
 configure:
-	mkdir build
-	mkdir symbols
+	mkdir -p build
+	mkdir -p symbols
 clean:
 	rm -rf build/*
 	rm -rf symbols/*

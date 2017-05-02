@@ -3,6 +3,7 @@
 #include "video.h"
 #include "interrupt.h"
 #include "rtc.h"
+#include "main.h"
 
 uint8_t floppyBuffer[DMA_MAX_TRANSFER_SIZE];
 
@@ -11,8 +12,13 @@ char handled_irq = 0;
 void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector)
 {
     *cyl    = lba / (2 * FLOPPY_SPT);
-    *head   = ((lba % (2 * FLOPPY_SPT)) / FLOPPY_SPT);
-    *sector = ((lba % (2 * FLOPPY_SPT)) % FLOPPY_SPT + 1);
+
+    //*head   = ((lba % (2 * FLOPPY_SPT)) / FLOPPY_SPT);
+    *head = ((lba / FLOPPY_SPT) % 2);
+
+	//*sector = ((lba % (2 * FLOPPY_SPT)) % FLOPPY_SPT + 1);
+	*sector = ((lba % FLOPPY_SPT) + 1);
+
 }
 
 /*
@@ -51,6 +57,11 @@ void init_DMA_floppy_read(uint16_t count){
 	outb(DMA_1_FF_REG_IO, 0xFF); //reset master flip flop
 	outb(DMA_COUNT_REG_IO_2, (uint8_t) count); //low byte of count
 	outb(DMA_COUNT_REG_IO_2, (uint8_t) (count >> 8)); //high byte of count
+	printString("DMA Count: ");
+	printUint32((uint8_t)count);
+	printString(" / ");
+	printUint32((uint8_t)(count >> 8));
+	printString("\n");
 	outb(DMA_1_MODE_REG_IO, DMA_MOD_REG_MOD_BLOCK | DMA_MOD_REG_BIT_AUTO | DMA_MOD_REG_TRA_WRITE_MEM | DMA_MOD_REG_SEL_2);
 	outb(DMA_1_SING_MASK_REG_IO, 0x02); //mask channel 0
 }
@@ -66,7 +77,7 @@ void check_floppy_version(){
 	uint8_t val = inb(FLOPPY_DATA_FIFO_IO);
 	if(val != 0x90){
 		printString("ERROR 2. Value: ");
-		print_hex(val);
+		printUint32(val);
 		while(1){
 		}
 	}
@@ -220,15 +231,29 @@ void floppy_stopMotor(uint32_t motorId){
 }
 
 void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
-	init_DMA_floppy_read((((bytecount - (bytecount % 512)) + ((bytecount % 512 == 0) ? 0 : 1) * (512))) -1) ;
+	uint16_t eff = (((bytecount - (bytecount % 512)) + ((bytecount % 512 == 0) ? 0 : 1) * (512))) -1;
+	init_DMA_floppy_read(eff) ;
 	floppy_startMotor(0);
-	sleep(1);
+	sleepMs(1500);
 	handled_irq = 0;
 	uint16_t cyl;
 	uint16_t head;
 	uint16_t sec;
 
+	uint16_t sector_count = (bytecount / 512) + ((bytecount % 512 == 0)? 0: 1);
+
 	lba_2_chs(lba, &cyl, &head, &sec);
+	
+	printString("Reading ");
+	printUint32(sector_count);
+	printString(" sectors from c: ");
+	printUint32(cyl);
+	printString(" h: ");
+	printUint32(head);
+	printString(" s: ");
+	printUint32(sec);
+	printString("\n");
+	
 	floppy_waitForNextParam();
 	outb(FLOPPY_DATA_FIFO_IO, FLOPPY_CMD_OPTION_MT | FLOPPY_CMD_OPTION_MF | FLOPPY_CMD_READ_DATA);
 	floppy_waitForNextParam();
@@ -243,7 +268,7 @@ void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
 	floppy_waitForNextParam();
 	outb(FLOPPY_DATA_FIFO_IO, 2);
 	floppy_waitForNextParam();
-	outb(FLOPPY_DATA_FIFO_IO, (bytecount / 512) + ((bytecount % 512 == 0) ? 0 : 1));
+	outb(FLOPPY_DATA_FIFO_IO, sector_count);
 	floppy_waitForNextParam();
 	outb(FLOPPY_DATA_FIFO_IO, FLOPPY_CMD_RW_PARAM_GAP1);
 	floppy_waitForNextParam();
@@ -307,10 +332,20 @@ void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
 	}
 
 	floppy_stopMotor(0);
-	sleepMs(500);
+	sleepMs(1000);
+	printString("Copying ");
+	printUint32(bytecount);
+	printString(" (");
+	printUint32(eff);
+	printString (" bytes / ");
+	printUint32(sector_count); 
+	printString(" sectors) bytes to ");
+	printUint32((uint32_t) addr);
+	printString("\n");
 	for(int i = 0; i < bytecount; i++){
 		addr[i] = floppyBuffer[i];
 	}
+	ZeroMemory(floppyBuffer, sizeof(floppyBuffer));
 }
 
 void handle_irq_6(){

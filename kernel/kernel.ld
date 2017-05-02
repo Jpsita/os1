@@ -1,8 +1,8 @@
 ENTRY(entryc);
 SECTIONS
 {
-	. = 0xBE00;
-	.text : AT(0xBE00) {
+	. = 0x8e00;
+	.text : AT(0x8e00) {
 		build/main.o(.text);
 		build/utils.o(.text);
 		build/video.o(.text);
@@ -54,8 +54,8 @@ SECTIONS
 		build/string.o(.rodata);
 		build/string.o(.rel.text);
 	}
-	. = 0x021200;
-	.eh_frame : AT(0x21200) {
+	. = 0x21200;
+	.eh_frame : AT(0x301200) {
 		*.*(.eh_frame);
 	}
 	

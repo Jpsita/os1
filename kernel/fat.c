@@ -44,14 +44,20 @@ uint16_t readFatentry(FAT_IMPL* fat, uint16_t cluster){
 uint32_t loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, uint32_t bufferSize){
 	uint32_t redBytes = 0;
 	uint16_t fat_value;
-	printString("DT: ");
-	printUint32(fat->data_offset_secs);
-	printString("\n");
+	//printString("DT: ");
+	//printUint32(fat->data_offset_secs);
+	//printString("\n");
 	do{
 		fat_value = readFatentry(fat, cluster);
 		if(fat_value != 0xFF7){
 			uint16_t sector_id = fat->data_offset_secs + cluster - 2;
-			floppy_read(sector_id, 1, buffer + redBytes);
+			printString("Reading sector: ");
+			printUint32(sector_id);
+			printString("\n");
+			floppy_read(sector_id, 512, buffer + redBytes);
+		}else{
+			cluster++;
+			continue;
 		}
 		cluster = fat_value;
 		redBytes += 512;
@@ -64,20 +70,15 @@ uint32_t loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, u
 
 uint8_t tempDirBuffer[1024];
 
-uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, uint16_t num_entries){
-	uint8_t* ptr = fat->root_directory;
+uint16_t readDirectoryEntry(uint8_t* ptr, FAT_DIR_LN_ENTRY* output) {
 	uint16_t n_entries = 0;
-	uint32_t len = strlen(path);
-	if(path[len - 1] != '/'){
-		return ~0;
-	}
+	FAT_LONG_NAME* ln;
 	FAT_DIR_LN_ENTRY* ent = output;
 	ent->long_name[0] = 0;
-	FAT_LONG_NAME* ln;
 	FAT_ENTRY* en;
-	while(*ptr != 0){
-		switch(ptr[11]){
-			case 0x0F:
+	while (*ptr != 0) {
+		uint8_t attrs = ptr[11];
+		if (attrs == 0x0F) {
 			ln = (FAT_LONG_NAME*)ptr;
 			stradd(ent->long_name, (uint8_t)(ln->name[0] >> 8));
 			stradd(ent->long_name, (uint8_t)(ln->name[1] >> 8));
@@ -92,34 +93,48 @@ uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, ui
 			stradd(ent->long_name, (uint8_t)(ln->name2[5] >> 8));
 			stradd(ent->long_name, (uint8_t)(ln->name3[0] >> 8));
 			stradd(ent->long_name, (uint8_t)(ln->name3[1] >> 8));
-			break;
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x04:
-			case 0x10:
-			case 0x20:
+		}
+		else if (attrs == 0x08) {
+
+		}else{
 			en = (FAT_ENTRY*)ptr;
-			if(strcat_nn(ent->long_name, en->name, 8, ' ') != 0){
-				stradd(ent->long_name, '.');
-				strcat_n(ent->long_name, en->extension, 3);
+			if (strcat_nn(ent->long_name, en->name, 8, ' ') != 0) {
+				if ((en->attributes & 0x10) == 0) {
+					
+					stradd(ent->long_name, '.');
+					strcat_n(ent->long_name, en->extension, 3);
+				}
 			}
 			ent->attributes = en->attributes;
 			ent->cluster = en->cluster_low;
 			ent++;
 			n_entries++;
-			break;
-			case 0x08:
-			break;
 		}
 		ptr += 32;
 	}
+	return n_entries;
+}
+
+
+uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, uint16_t num_entries) {
+	uint8_t* ptr = fat->root_directory;
+	uint16_t n_entries = 0;
+	uint32_t len = strlen(path);
+	uint32_t isFolderEmpty = 0;
+	if (path[len - 1] != '/') {
+		return ~0;
+	}
+	FAT_DIR_LN_ENTRY* ent = output;
+	ent->long_name[0] = 0;
+	FAT_LONG_NAME* ln;
+	FAT_ENTRY* en;
+	n_entries = readDirectoryEntry(ptr, output);
 	uint32_t pos = 0;
 	uint32_t found = 0;
 	FAT_DIR_LN_ENTRY enx;
-	do{
+	do {
 		uint32_t pos = strpos_s(path, '/', 1);
-		if(pos == ~0){
+		if (pos == ~0 || isFolderEmpty) {
 			return n_entries;
 		}
 		uint8_t pth[64];
@@ -128,22 +143,36 @@ uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, ui
 		printString(">Looking for ");
 		printString(pth);
 		printString(": ");
-		for(int i = 0; i < n_entries; i++){
-			if(strcmp(output[i].long_name, pth) == 0){
+		for (int i = 0; i < n_entries; i++) {
+			if (strcmp(output[i].long_name, pth) == 0) {
 				found = 1;
 				enx = output[i];
 			}
 		}
-		if(found == 0){
+		if (found == 0) {
 			printString("Not Found\n");
 			return ~0;
-		}else{
-			n_entries = 0;
 		}
-		path += pos;
-
-	}while(pos != ~0);
+		else {
+			printString("Found!\n");
+			n_entries = 0;
+			ent = output;
+			if ((enx.attributes && 0x10) > 0) {
+				ZeroMemory(tempDirBuffer, sizeof(tempDirBuffer));
+				uint32_t redBytes = loadFileFromCluster(fat, enx.cluster, tempDirBuffer, sizeof(tempDirBuffer));
+				if(redBytes != 0){
+					uint8_t* tmp_ptr = tempDirBuffer;
+					ZeroMemory((uint8_t*) output, 240 * sizeof(FAT_DIR_LN_ENTRY));
+					n_entries = readDirectoryEntry(tmp_ptr, output);
+					path += pos;
+					isFolderEmpty = 0;
+				}else{
+					isFolderEmpty = 1;
+					path += pos;
+				}
+			}
+		}
+	}while (pos != ~0);
 	return n_entries;
 }
-
 

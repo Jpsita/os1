@@ -187,8 +187,11 @@ overflow_fault_HNDLR_exit:
 extern protection_fault
 global protection_fault_HNDLR
 protection_fault_HNDLR:
+	POP		EAX
+	PUSH	EAX
 	CALL	protection_fault
 protection_fault_HNDLR_exit:
+	POP EAX
 	IRET
 
 ;----------END----------
@@ -232,3 +235,15 @@ rtc_HNDLR:
 	IRET
 
 ;----------END----------
+
+
+extern handle_int_49
+global int49_HNDLR
+int49_HNDLR:
+	PUSH EAX
+	CALL handle_int_49
+	ADD ESP, 4
+	IRET
+
+;----------END----------
+

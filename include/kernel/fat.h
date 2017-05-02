@@ -3,8 +3,6 @@
 
 #include "main.h"
 
-
-
 typedef struct  PACKED{
 	uint8_t		jump[3];
 	uint8_t		OEM[8];

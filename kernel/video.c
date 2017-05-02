@@ -30,6 +30,7 @@ void updateCursor(){
 	outb(video_base + VGA_INDEX_COMMAND_PORT, (unsigned char)((cursorPos >> 8)&0xFF));
 }
 
+//1
 void printCharacterAtPos(char c, char color, int x, int y){
 	char * tmp = videoMem;
 	tmp += (y * 160);
@@ -39,6 +40,7 @@ void printCharacterAtPos(char c, char color, int x, int y){
 	updateCursor();
 }
 
+//2
 void clearScreen(){
 	char * tmp = videoMem;
 	int i = 0;
@@ -49,6 +51,7 @@ void clearScreen(){
 	updateCursor();
 }
 
+//3
 void printTab(){
 	posX += 4;
 	if(posX >= 80){
@@ -57,6 +60,7 @@ void printTab(){
 	updateCursor();
 }
 
+//4
 void newLine(){
 	posX = 0;
 	posY+= 1;
@@ -68,7 +72,7 @@ void newLine(){
 }
 
 
-
+//5
 void deleteCurrentChar(){
 	posX--;
 	if(posX < 0){
@@ -83,6 +87,7 @@ void deleteCurrentChar(){
 
 }
 
+//6
 void printString(char * s){
 	while(*s){
 		if(*s != '\n'){
@@ -104,6 +109,7 @@ void printString(char * s){
 	updateCursor();
 }
 
+//7
 void printCharacter(char chr){
 	printCharacterAtPos(chr, COLOR_WHITE_BLACK, posX, posY);
 	posX++;
@@ -172,6 +178,7 @@ void printHex(uint32_t val){
 	}
 }
 
+//8
 void printUint32(uint32_t val){
 	printString("0x");
 	uint32_t i = 28;

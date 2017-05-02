@@ -3,7 +3,7 @@ USE16
 ;DEFINES
 
 NULL					EQU	0
-FLOPPY_144_SECTORS_PER_TRACK 	EQU 	18
+FLOPPY_144_SECTORS_PER_TRACK	EQU	18
 PRINT_FUNC_AH			EQU	0Eh
 PRINT_FUNC_INT			EQU	10h
 MAIN_FLOPPY_DRIVE			EQU	0
@@ -21,7 +21,7 @@ bps			dw		0x200		;bytes per sector
 spc			db		0x01		;sectors per cluster
 rsv			dw		0x01		;reserved logical sectors
 fats		db		0x02		;number of FATs
-dirs		dw		240 		;Max number of root directories
+dirs		dw		240		;Max number of root directories
 secs		dw		2880		;total logical sectors
 tp			db		0xF0		;media descriptor
 spft		dw		0x09		;logical sectors per FAT
@@ -52,7 +52,7 @@ tpx			db		'FAT12   '		;File system label
 ; Temp values: modified
 ;------------------------
 
-read:		
+read:
 	MOV BP, SP
 	MOV EAX, [BP + 2]
 	CALL eff_2_chs		;converting effective address to CHS
@@ -90,7 +90,7 @@ eff_ret:
 	MOV DH, [head]				;load HEAD
 	MOV BX, [BP + 8]			;load BUFF
 	PUSH ES						;save ES
-	MOV ES, [DS:BP + 10]		;load BUFF_HIGH
+	MOV ES, [DS:BP + 12]		;load BUFF_HIGH
 eff_read:
 	INT FLOPPY_READ_FUNC_INT	;launch interrupt
 	POP ES						;restore ES
@@ -124,7 +124,7 @@ eff_2_chs:
 	DIV EBX						;= (in EAX, leftover in EDX)
 	XOR EDX, EDX				;zeroing leftover
 	MOV EBX, 2					;number of HEADS
-	DIV EBX						;= divide EAX vy EBX(2)
+	DIV EBX						;= divide EAX by EBX(2)
 	MOV [head], DL				;save effective HEAD
 	;sector
 	XOR EDX, EDX				;zeroing leftover
@@ -165,9 +165,9 @@ startup:
 	PUSHA
 	MOV DX, 0x0
 	PUSH DX
-	MOV CX, 0xBE00
+	MOV CX, 0x8e00
 	PUSH CX
-	MOV BX, 21
+	MOV BX, 0x16
 	PUSH BX
 	MOV EAX, 0x23
 	PUSH EAX
@@ -198,7 +198,7 @@ at_32:
 	MOV DS, AX
 	MOV ES, AX
 	MOV SS, AX
-	jmp 0xbe00
+	jmp 0x8e00
 
 
 SECTION .data

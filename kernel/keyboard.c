@@ -2,9 +2,11 @@
 #include "scancodes.h"
 #include "video.h"
 #include "utils.h"
+#include "rtc.h"
 #include "interrupt.h"
 
 unsigned char KEYB_STATUS_BYTE = 0;
+uint8_t currentChar = 0;
 
 int isShift(){
 	if(KEYB_STATUS_BYTE & STATUS_BIT_SHIFT){
@@ -66,6 +68,7 @@ void parseKey(short int key){
 		case NULL:
 			break;
 		default:
+			currentChar = (uint8_t) key;
 			printCharacter(key);
 	}
 }
@@ -133,4 +136,12 @@ void init_keyboard(){
 		x = inb(PS2_DATA_PORT);	
 		//printCharacter('r');
 	}
+}
+
+char getCh(){
+	while(red == 0){
+		sleepMs(10);
+	}
+	red = 0;
+	return currentChar;
 }

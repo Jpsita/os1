@@ -1,4 +1,4 @@
-#ifndef __JPS_MAIM_H
+#ifndef __JPS_MAIN_H
 #define __JPS_MAIN_H
 
 #define NULL 0
@@ -17,5 +17,7 @@ typedef signed int int32_t;
 typedef unsigned int uint32_t;
 typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
+
+void ZeroMemory(uint8_t* addr, uint32_t size);
 
 #endif

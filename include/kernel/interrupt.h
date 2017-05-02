@@ -48,9 +48,10 @@ typedef struct PACKED {
 	uint32_t address;
 } IDTPointer;
 
-void print_hex(uint32_t val);
 
 void disable_echo();
 void enable_echo();
+
+extern char red; 
 
 #endif

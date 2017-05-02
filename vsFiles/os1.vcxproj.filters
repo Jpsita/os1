@@ -75,4 +75,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\kernel\kernel.ld">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\kernel\utils.asm">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

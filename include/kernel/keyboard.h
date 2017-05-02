@@ -30,4 +30,6 @@ void parseKeyOff(short int key);
 char scancodeToAscii(unsigned char sc);
 
 void init_keyboard();
+
+char getCh();
 #endif

@@ -1,6 +1,8 @@
 #ifndef __JPS_UTILS_H
 #define __JPS_UTILS_H
+
 #include "main.h"
+
 char inb(int a);
 char outb(int port, int val);
 void waitLoop();
@@ -23,5 +25,7 @@ void rtc_HNDLR();
 
 void util_cli();
 void util_sti();
+
+void int49_HNDLR();
 
 #endif

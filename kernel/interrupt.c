@@ -2,9 +2,11 @@
 #include "keyboard.h"
 #include "utils.h"
 #include "video.h"
+#include "functionIds.h"
 
 IDTDescr IDT[256];
 char echo_byte;
+char red = 0;
 
 void PIC_sendEOI(unsigned char IRQ){
 	if(IRQ >= 8){
@@ -20,66 +22,10 @@ void c_dbl_flt(){
 	}
 }
 
-void print_hex(uint32_t val){
-	static char str[9];
-	str[8] = 0;
-	for(int i = 0; i  < 8;  i++){
-		uint32_t cv = val % 0x10;
-		val = val >> 4;
-		switch(cv){
-		case 0x00:
-			str[7-i] = '0';
-			break;
-		case 0x01:
-			str[7-i] = '1';
-			break;
-		case 0x02:
-			str[7-i] = '2';
-			break;
-		case 0x03:
-			str[7-i] = '3';
-			break;
-		case 0x04:
-			str[7-i] = '4';
-			break;
-		case 0x05:
-			str[7-i] = '5';
-			break;
-		case 0x06:
-			str[7-i] = '6';
-			break;
-		case 0x07:
-			str[7-i] = '7';
-			break;
-		case 0x08:
-			str[7-i] = '8';
-			break;
-		case 0x09:
-			str[7-i] = '9';
-			break;
-		case 0x0A:
-			str[7-i] = 'A';
-			break;
-		case 0x0B:
-			str[7-i] = 'B';
-			break;
-		case 0x0C:
-			str[7-i] = 'C';
-			break;
-		case 0x0D:
-			str[7-i] = 'D';
-			break;
-		case 0x0E:
-			str[7-i] = 'E';
-			break;
-		case 0x0F:
-			str[7-i] = 'F';
-			break;
-		default:
-			str[7-i] = '?';
-		}
+void ZeroMemory(uint8_t* addr, uint32_t size) {
+	for (int i = 0; i < size; i++) {
+		addr[i] = 0;
 	}
-	printString(str);
 }
 
 void PIC_remap(int offset1, int offset2){
@@ -126,15 +72,11 @@ void handle_irq_1(){
 			parseKeyOff(k);
 		return;
 	}
-	//if(x == 0xE0){
-	//x = inb(0x60);
-	//return;
-	//}
-	//print_hex(x);
-	//printCharacter(' ');
 	char k = scancodeToAscii(x);
-	if(echo_byte != 0)
+	red = 1;
+	if(echo_byte != 0){
 		parseKey(k);
+	}
 }
 
 
@@ -175,8 +117,9 @@ void overflow_fault(){
 	}
 }
 
-void protection_fault(){
-	printString("FAULT: GENERIC PROTECTION");
+void protection_fault(uint32_t addr){
+	printString("FAULT: GENERIC PROTECTION\n");
+	printUint32(addr);
 	while(1){
 		
 	}
@@ -220,8 +163,11 @@ void create_IDT(){
 	fill_IDT_entry(0x26, floppy_addr, 0);
 	uint32_t rtc_addr = (uint32_t) &rtc_HNDLR;
 	fill_IDT_entry(0x28, rtc_addr, 0);
+	uint32_t x49_addr = (uint32_t) &int49_HNDLR;
+	fill_IDT_entry(0x49, x49_addr, 0);
 	load_IDT((uint32_t) &p);
 	init_keyboard();
+	
 
 	outb(PIC1_DATA, 0b10111001);
 	outb(PIC2_DATA, 0xFE);
@@ -233,4 +179,22 @@ void disable_echo(){
 
 void enable_echo(){
 	echo_byte = 1;
+}
+
+uint32_t handle_int_49(uint32_t id){
+	switch(id){
+		case PRINTCHARACTERATPOS_ID:
+			return (uint32_t) &printCharacterAtPos;
+		case CLEARSCREEN_ID:
+			return (uint32_t) &clearScreen;
+		case PRINTTAB_ID:
+			return (uint32_t) &printTab;
+		case NEWLINE_ID:
+			return (uint32_t) &newLine;
+		case DELETECURRENTCHAR_ID:
+			return (uint32_t) &deleteCurrentChar;
+		case PRINTSTRING_ID:
+			return (uint32_t) &printString;
+	}
+	return 0;
 }
