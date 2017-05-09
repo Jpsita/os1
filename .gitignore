@@ -11,3 +11,5 @@ bootload.sym
 *.save.*
 *.tmp
 *.txt
+*.~*
+.~lock.memory_map.xlsx#
