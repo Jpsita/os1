@@ -54,12 +54,13 @@ void entryc(){
 
 			printString("Loading Shell...\n");
 			//enable_echo();
-			tmpPtr = (uint8_t*) 0x80000;
-			//uint32_t size = loadFileFromCluster(&fatImpl, root_dir_entries[i].cluster, tmpPtr, 0x600);
+			tmpPtr = (uint8_t*) 0x10000;
+			uint32_t size = loadFileFromCluster(&fatImpl, root_dir_entries[i].cluster, tmpPtr, 0x600);
 			//printString("Size: ");
 			//printUint32(size);
-			floppy_read(0x37, 512, tmpPtr);
-			callShell = (void (*)) 0x80000;
+			//floppy_read(0x38, 1024, tmpPtr);
+			//enable_echo();
+			callShell = (void (*)) 0x10000;
 			callShell();
 			break;
 		}

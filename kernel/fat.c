@@ -54,7 +54,7 @@ uint32_t loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, u
 			printString("Reading sector: ");
 			printUint32(sector_id);
 			printString("\n");
-			floppy_read(sector_id, 512, buffer + redBytes);
+			floppy_read(sector_id, (sector_id == 0x38) ? 1024 : 512, buffer + redBytes); //Bug in qemu code? Sector 0x38 alone is not read correctly
 		}else{
 			cluster++;
 			continue;

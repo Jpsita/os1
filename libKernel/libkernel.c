@@ -5,9 +5,10 @@
 
 void (*_printString)(char* str) = 0;
 
-void printString(char* s){
+void lprintString(char* s){
     if(_printString == 0){
         _printString = util_int49(PRINTSTRING_ID);
     }
+    _printString(s);
 }
 

@@ -3,6 +3,7 @@ Allocating common symbols
 Common symbol       size              file
 
 floppyBuffer        0x10000           build/floppy.o
+nextChar            0x4               build/main.o
 fat                 0x2400            build/main.o
 echo_byte           0x1               build/interrupt.o
 tempDirBuffer       0x400             build/fat.o
@@ -22,203 +23,204 @@ Linker script and memory map
 
                 0x0000000000008e00                . = 0x8e00
 
-.text           0x0000000000008e00     0x29d3
+.text           0x0000000000008e00     0x2a13
  build/main.o(.text)
- .text          0x0000000000008e00      0x1a9 build/main.o
+ .text          0x0000000000008e00      0x1c8 build/main.o
                 0x0000000000008e00                entryc
  build/utils.o(.text)
- *fill*         0x0000000000008fa9        0x7 
- .text          0x0000000000008fb0       0xb1 build/utils.o
-                0x0000000000008fb0                inb
-                0x0000000000008fbf                io_wait
-                0x0000000000008fc7                outb
-                0x0000000000008fd4                waitLoop
-                0x0000000000008fdb                keybSp
-                0x0000000000008ff0                irq_1
-                0x0000000000009003                load_IDT
-                0x0000000000009010                double_fault_HNDLR
-                0x0000000000009021                d_b_0_HNDLR
-                0x0000000000009027                segment_fault_HNDLR
-                0x000000000000902d                stack_fault_HNDLR
-                0x0000000000009033                overflow_fault_HNDLR
-                0x0000000000009039                protection_fault_HNDLR
-                0x0000000000009042                PIC_timer
-                0x0000000000009043                util_cli
-                0x0000000000009045                util_sti
-                0x0000000000009047                floppy_HNDLR
-                0x000000000000904f                rtc_HNDLR
-                0x0000000000009057                int49_HNDLR
+ *fill*         0x0000000000008fc8        0x8 
+ .text          0x0000000000008fd0       0xb1 build/utils.o
+                0x0000000000008fd0                inb
+                0x0000000000008fdf                io_wait
+                0x0000000000008fe7                outb
+                0x0000000000008ff4                waitLoop
+                0x0000000000008ffb                keybSp
+                0x0000000000009010                irq_1
+                0x0000000000009023                load_IDT
+                0x0000000000009030                double_fault_HNDLR
+                0x0000000000009041                d_b_0_HNDLR
+                0x0000000000009047                segment_fault_HNDLR
+                0x000000000000904d                stack_fault_HNDLR
+                0x0000000000009053                overflow_fault_HNDLR
+                0x0000000000009059                protection_fault_HNDLR
+                0x0000000000009062                PIC_timer
+                0x0000000000009063                util_cli
+                0x0000000000009065                util_sti
+                0x0000000000009067                floppy_HNDLR
+                0x000000000000906f                rtc_HNDLR
+                0x0000000000009077                int49_HNDLR
  build/video.o(.text)
- .text          0x0000000000009061      0x4c8 build/video.o
-                0x0000000000009061                loadVideoPort
-                0x0000000000009075                updateCursor
-                0x000000000000910a                printCharacterAtPos
-                0x000000000000915a                clearScreen
-                0x000000000000919d                printTab
-                0x00000000000091cc                newLine
-                0x0000000000009208                deleteCurrentChar
-                0x0000000000009270                printString
-                0x000000000000930e                printCharacter
-                0x0000000000009382                printHex
-                0x00000000000094a8                printUint32
+ .text          0x0000000000009081      0x4c8 build/video.o
+                0x0000000000009081                loadVideoPort
+                0x0000000000009095                updateCursor
+                0x000000000000912a                printCharacterAtPos
+                0x000000000000917a                clearScreen
+                0x00000000000091bd                printTab
+                0x00000000000091ec                newLine
+                0x0000000000009228                deleteCurrentChar
+                0x0000000000009290                printString
+                0x000000000000932e                printCharacter
+                0x00000000000093a2                printHex
+                0x00000000000094c8                printUint32
  build/interrupt.o(.text)
- .text          0x0000000000009529      0x510 build/interrupt.o
-                0x0000000000009529                PIC_sendEOI
-                0x000000000000955f                c_dbl_flt
-                0x0000000000009577                ZeroMemory
-                0x000000000000959f                PIC_remap
-                0x00000000000096a0                handle_irq_1
-                0x0000000000009753                zero_IDT
-                0x0000000000009781                db0_fault
-                0x0000000000009799                segment_fault
-                0x00000000000097b1                stack_fault
-                0x00000000000097c9                overflow_fault
-                0x00000000000097e1                protection_fault
-                0x0000000000009807                fill_IDT_entry
-                0x000000000000986e                create_IDT
-                0x00000000000099d6                disable_echo
-                0x00000000000099e3                enable_echo
-                0x00000000000099f0                handle_int_49
+ .text          0x0000000000009549      0x510 build/interrupt.o
+                0x0000000000009549                PIC_sendEOI
+                0x000000000000957f                c_dbl_flt
+                0x0000000000009597                ZeroMemory
+                0x00000000000095bf                PIC_remap
+                0x00000000000096c0                handle_irq_1
+                0x0000000000009773                zero_IDT
+                0x00000000000097a1                db0_fault
+                0x00000000000097b9                segment_fault
+                0x00000000000097d1                stack_fault
+                0x00000000000097e9                overflow_fault
+                0x0000000000009801                protection_fault
+                0x0000000000009827                fill_IDT_entry
+                0x000000000000988e                create_IDT
+                0x00000000000099f6                disable_echo
+                0x0000000000009a03                enable_echo
+                0x0000000000009a10                handle_int_49
  build/keyboard.o(.text)
- .text          0x0000000000009a39      0x24c build/keyboard.o
-                0x0000000000009a39                isShift
-                0x0000000000009a59                doShift
-                0x0000000000009a6c                unShift
-                0x0000000000009a79                isCtrl
-                0x0000000000009a99                doCtrl
-                0x0000000000009aac                unCtrl
-                0x0000000000009ab9                scancodeToAscii
-                0x0000000000009ae8                parseKey
-                0x0000000000009b4a                parseKeyOff
-                0x0000000000009b76                PS2_wait
-                0x0000000000009baa                init_keyboard
-                0x0000000000009c59                getCh
+ .text          0x0000000000009a59      0x24c build/keyboard.o
+                0x0000000000009a59                isShift
+                0x0000000000009a79                doShift
+                0x0000000000009a8c                unShift
+                0x0000000000009a99                isCtrl
+                0x0000000000009ab9                doCtrl
+                0x0000000000009acc                unCtrl
+                0x0000000000009ad9                scancodeToAscii
+                0x0000000000009b08                parseKey
+                0x0000000000009b6a                parseKeyOff
+                0x0000000000009b96                PS2_wait
+                0x0000000000009bca                init_keyboard
+                0x0000000000009c79                getCh
  build/scancodes.o(.text)
- .text          0x0000000000009c85        0x0 build/scancodes.o
+ .text          0x0000000000009ca5        0x0 build/scancodes.o
  build/rtc.o(.text)
- .text          0x0000000000009c85      0x1aa build/rtc.o
-                0x0000000000009c85                NMI_enable
-                0x0000000000009caf                NMI_disable
-                0x0000000000009cd8                handle_irq_8
-                0x0000000000009d26                getTime
-                0x0000000000009d3d                sleepMs
-                0x0000000000009d8d                sleep
-                0x0000000000009dd1                init_RTC
+ .text          0x0000000000009ca5      0x1aa build/rtc.o
+                0x0000000000009ca5                NMI_enable
+                0x0000000000009ccf                NMI_disable
+                0x0000000000009cf8                handle_irq_8
+                0x0000000000009d46                getTime
+                0x0000000000009d5d                sleepMs
+                0x0000000000009dad                sleep
+                0x0000000000009df1                init_RTC
  build/floppy.o(.text)
- .text          0x0000000000009e2f      0xb67 build/floppy.o
-                0x0000000000009e2f                lba_2_chs
-                0x0000000000009e85                init_floppy_DMA
-                0x0000000000009f6c                init_DMA_floppy_write
-                0x0000000000009fea                init_DMA_floppy_read
-                0x000000000000a0c0                check_floppy_version
-                0x000000000000a13c                floppy_waitForNextParam
-                0x000000000000a158                send_configure_command
-                0x000000000000a1cc                send_lock_command
-                0x000000000000a209                floppy_reset
-                0x000000000000a26e                send_specify_command
-                0x000000000000a2bf                floppy_select_drive
-                0x000000000000a2ec                floppy_sense_interrupt
-                0x000000000000a33b                floppy_recalibrate
-                0x000000000000a3b6                floppy_init
-                0x000000000000a407                floppy_startMotor
-                0x000000000000a468                floppy_stopMotor
-                0x000000000000a4c9                floppy_read
-                0x000000000000a979                handle_irq_6
+ .text          0x0000000000009e4f      0xb67 build/floppy.o
+                0x0000000000009e4f                lba_2_chs
+                0x0000000000009ea5                init_floppy_DMA
+                0x0000000000009f8c                init_DMA_floppy_write
+                0x000000000000a00a                init_DMA_floppy_read
+                0x000000000000a0e0                check_floppy_version
+                0x000000000000a15c                floppy_waitForNextParam
+                0x000000000000a178                send_configure_command
+                0x000000000000a1ec                send_lock_command
+                0x000000000000a229                floppy_reset
+                0x000000000000a28e                send_specify_command
+                0x000000000000a2df                floppy_select_drive
+                0x000000000000a30c                floppy_sense_interrupt
+                0x000000000000a35b                floppy_recalibrate
+                0x000000000000a3d6                floppy_init
+                0x000000000000a427                floppy_startMotor
+                0x000000000000a488                floppy_stopMotor
+                0x000000000000a4e9                floppy_read
+                0x000000000000a999                handle_irq_6
  build/fat.o(.text)
- .text          0x000000000000a996      0x734 build/fat.o
-                0x000000000000a996                initializeFAT
-                0x000000000000aaf4                readFatentry
-                0x000000000000ab42                loadFileFromCluster
-                0x000000000000ac0c                readDirectoryEntry
-                0x000000000000ae6f                listFilesFAT
+ .text          0x000000000000a9b6      0x748 build/fat.o
+                0x000000000000a9b6                initializeFAT
+                0x000000000000ab14                readFatentry
+                0x000000000000ab62                loadFileFromCluster
+                0x000000000000ac40                readDirectoryEntry
+                0x000000000000aea3                listFilesFAT
  build/string.o(.text)
- .text          0x000000000000b0ca      0x29d build/string.o
-                0x000000000000b0ca                strlen
-                0x000000000000b0ed                strcmp
-                0x000000000000b17a                strcat
-                0x000000000000b1c2                strcat_n
-                0x000000000000b21a                strcat_nn
-                0x000000000000b279                stradd
-                0x000000000000b2ad                strpos_s
-                0x000000000000b2f2                strpos
-                0x000000000000b312                substr
+ .text          0x000000000000b0fe      0x29d build/string.o
+                0x000000000000b0fe                strlen
+                0x000000000000b121                strcmp
+                0x000000000000b1ae                strcat
+                0x000000000000b1f6                strcat_n
+                0x000000000000b24e                strcat_nn
+                0x000000000000b2ad                stradd
+                0x000000000000b2e1                strpos_s
+                0x000000000000b326                strpos
+                0x000000000000b346                substr
  build/main.o(.data)
- .data          0x000000000000b367        0x0 build/main.o
+ .data          0x000000000000b39b        0x0 build/main.o
  build/main.o(.bss)
- .bss           0x000000000000b367        0x0 build/main.o
+ .bss           0x000000000000b39b        0x0 build/main.o
  build/main.o(.rodata)
- *fill*         0x000000000000b367        0x1 
- .rodata        0x000000000000b368       0xca build/main.o
+ *fill*         0x000000000000b39b        0x1 
+ .rodata        0x000000000000b39c       0xca build/main.o
  build/main.o(.rel.text)
- .rel.text      0x000000000000b432        0x0 build/main.o
+ .rel.text      0x000000000000b466        0x0 build/main.o
  build/utils.o(.data)
  build/utils.o(.bss)
  build/utils.o(.rodata)
  build/utils.o(.rel.text)
  build/video.o(.data)
- *fill*         0x000000000000b432        0x2 
- .data          0x000000000000b434        0x4 build/video.o
-                0x000000000000b434                videoMem
+ *fill*         0x000000000000b466        0x2 
+ .data          0x000000000000b468        0x4 build/video.o
+                0x000000000000b468                videoMem
  build/video.o(.bss)
- .bss           0x000000000000b438        0x8 build/video.o
-                0x000000000000b438                posX
-                0x000000000000b43c                posY
+ .bss           0x000000000000b46c        0x8 build/video.o
+                0x000000000000b46c                posX
+                0x000000000000b470                posY
  build/video.o(.rodata)
- .rodata        0x000000000000b440       0x43 build/video.o
+ .rodata        0x000000000000b474       0x43 build/video.o
  build/video.o(.rel.text)
  build/interrupt.o(.data)
- .data          0x000000000000b483        0x0 build/interrupt.o
+ .data          0x000000000000b4b7        0x0 build/interrupt.o
  build/interrupt.o(.bss)
- .bss           0x000000000000b483        0x1 build/interrupt.o
-                0x000000000000b483                red
+ .bss           0x000000000000b4b7        0x1 build/interrupt.o
+                0x000000000000b4b7                red
  build/interrupt.o(.rodata)
- .rodata        0x000000000000b484      0x128 build/interrupt.o
+ .rodata        0x000000000000b4b8      0x128 build/interrupt.o
  build/interrupt.o(.rel.text)
  build/keyboard.o(.data)
- .data          0x000000000000b5ac        0x0 build/keyboard.o
+ .data          0x000000000000b5e0        0x0 build/keyboard.o
  build/keyboard.o(.bss)
- .bss           0x000000000000b5ac        0x2 build/keyboard.o
-                0x000000000000b5ac                KEYB_STATUS_BYTE
-                0x000000000000b5ad                currentChar
+ .bss           0x000000000000b5e0        0x2 build/keyboard.o
+                0x000000000000b5e0                KEYB_STATUS_BYTE
+                0x000000000000b5e1                currentChar
  build/keyboard.o(.rodata)
- *fill*         0x000000000000b5ae        0x2 
- .rodata        0x000000000000b5b0       0x70 build/keyboard.o
+ *fill*         0x000000000000b5e2        0x2 
+ .rodata        0x000000000000b5e4       0x70 build/keyboard.o
  build/keyboard.o(.rel.text)
  build/scancodes.o(.data)
- .data          0x000000000000b620       0xe5 build/scancodes.o
-                0x000000000000b620                scancode_tbl
-                0x000000000000b6a0                scancode_tbl_shift
+ *fill*         0x000000000000b654        0xc 
+ .data          0x000000000000b660       0xe5 build/scancodes.o
+                0x000000000000b660                scancode_tbl
+                0x000000000000b6e0                scancode_tbl_shift
  build/scancodes.o(.rodata)
  build/scancodes.o(.bss)
- .bss           0x000000000000b705        0x0 build/scancodes.o
+ .bss           0x000000000000b745        0x0 build/scancodes.o
  build/scancodes.o(.rel.text)
  build/rtc.o(.data)
- .data          0x000000000000b705        0x0 build/rtc.o
+ .data          0x000000000000b745        0x0 build/rtc.o
  build/rtc.o(.bss)
- *fill*         0x000000000000b705        0x3 
- .bss           0x000000000000b708        0x8 build/rtc.o
-                0x000000000000b708                time
+ *fill*         0x000000000000b745        0x3 
+ .bss           0x000000000000b748        0x8 build/rtc.o
+                0x000000000000b748                time
  build/rtc.o(.rodata)
  build/rtc.o(.rel.text)
  build/floppy.o(.data)
- .data          0x000000000000b710        0x0 build/floppy.o
+ .data          0x000000000000b750        0x0 build/floppy.o
  build/floppy.o(.bss)
- .bss           0x000000000000b710        0x1 build/floppy.o
-                0x000000000000b710                handled_irq
+ .bss           0x000000000000b750        0x1 build/floppy.o
+                0x000000000000b750                handled_irq
  build/floppy.o(.rodata)
- .rodata        0x000000000000b711       0x8b build/floppy.o
+ .rodata        0x000000000000b751       0x8b build/floppy.o
  build/floppy.o(.rel.text)
  build/fat.o(.data)
- .data          0x000000000000b79c        0x0 build/fat.o
+ .data          0x000000000000b7dc        0x0 build/fat.o
  build/fat.o(.bss)
- .bss           0x000000000000b79c        0x0 build/fat.o
+ .bss           0x000000000000b7dc        0x0 build/fat.o
  build/fat.o(.rodata)
- .rodata        0x000000000000b79c       0x37 build/fat.o
+ .rodata        0x000000000000b7dc       0x37 build/fat.o
  build/fat.o(.rel.text)
  build/string.o(.data)
- .data          0x000000000000b7d3        0x0 build/string.o
+ .data          0x000000000000b813        0x0 build/string.o
  build/string.o(.bss)
- .bss           0x000000000000b7d3        0x0 build/string.o
+ .bss           0x000000000000b813        0x0 build/string.o
  build/string.o(.rodata)
  build/string.o(.rel.text)
                 0x0000000000021200                . = 0x21200
@@ -242,17 +244,17 @@ Linker script and memory map
                                         0x138 (size before relaxing)
 OUTPUT(build/kernel.elf elf32-i386)
 
-.debug_info     0x0000000000000000     0x1ec7
- .debug_info    0x0000000000000000      0x2a6 build/main.o
- .debug_info    0x00000000000002a6       0x3b build/utils.o
- .debug_info    0x00000000000002e1      0x294 build/video.o
- .debug_info    0x0000000000000575      0x442 build/interrupt.o
- .debug_info    0x00000000000009b7      0x276 build/keyboard.o
- .debug_info    0x0000000000000c2d       0x68 build/scancodes.o
- .debug_info    0x0000000000000c95      0x1fa build/rtc.o
- .debug_info    0x0000000000000e8f      0x514 build/floppy.o
- .debug_info    0x00000000000013a3      0x778 build/fat.o
- .debug_info    0x0000000000001b1b      0x3ac build/string.o
+.debug_info     0x0000000000000000     0x1f44
+ .debug_info    0x0000000000000000      0x2e5 build/main.o
+ .debug_info    0x00000000000002e5       0x3b build/utils.o
+ .debug_info    0x0000000000000320      0x294 build/video.o
+ .debug_info    0x00000000000005b4      0x45e build/interrupt.o
+ .debug_info    0x0000000000000a12      0x298 build/keyboard.o
+ .debug_info    0x0000000000000caa       0x68 build/scancodes.o
+ .debug_info    0x0000000000000d12      0x1fa build/rtc.o
+ .debug_info    0x0000000000000f0c      0x514 build/floppy.o
+ .debug_info    0x0000000000001420      0x778 build/fat.o
+ .debug_info    0x0000000000001b98      0x3ac build/string.o
 
 .debug_abbrev   0x0000000000000000      0xaad
  .debug_abbrev  0x0000000000000000      0x11d build/main.o
@@ -288,36 +290,36 @@ OUTPUT(build/kernel.elf elf32-i386)
  .debug_aranges
                 0x0000000000000118       0x20 build/string.o
 
-.debug_line     0x0000000000000000      0xa05
- .debug_line    0x0000000000000000       0xb0 build/main.o
- .debug_line    0x00000000000000b0       0x9d build/utils.o
- .debug_line    0x000000000000014d      0x10c build/video.o
- .debug_line    0x0000000000000259      0x140 build/interrupt.o
- .debug_line    0x0000000000000399       0xe0 build/keyboard.o
- .debug_line    0x0000000000000479       0x4d build/scancodes.o
- .debug_line    0x00000000000004c6       0x99 build/rtc.o
- .debug_line    0x000000000000055f      0x2a1 build/floppy.o
- .debug_line    0x0000000000000800      0x12a build/fat.o
- .debug_line    0x000000000000092a       0xdb build/string.o
+.debug_line     0x0000000000000000      0xa4d
+ .debug_line    0x0000000000000000       0xbf build/main.o
+ .debug_line    0x00000000000000bf       0x9d build/utils.o
+ .debug_line    0x000000000000015c      0x10c build/video.o
+ .debug_line    0x0000000000000268      0x14e build/interrupt.o
+ .debug_line    0x00000000000003b6       0xee build/keyboard.o
+ .debug_line    0x00000000000004a4       0x4d build/scancodes.o
+ .debug_line    0x00000000000004f1       0x99 build/rtc.o
+ .debug_line    0x000000000000058a      0x2a1 build/floppy.o
+ .debug_line    0x000000000000082b      0x147 build/fat.o
+ .debug_line    0x0000000000000972       0xdb build/string.o
 
-.debug_str      0x0000000000000000      0xa97
- .debug_str     0x0000000000000000      0x1c7 build/main.o
-                                        0x1f5 (size before relaxing)
- .debug_str     0x00000000000001c7       0xd1 build/video.o
+.debug_str      0x0000000000000000      0xaaf
+ .debug_str     0x0000000000000000      0x1e8 build/main.o
+                                        0x21b (size before relaxing)
+ .debug_str     0x00000000000001e8       0xc8 build/video.o
                                         0x1a9 (size before relaxing)
- .debug_str     0x0000000000000298      0x164 build/interrupt.o
-                                        0x294 (size before relaxing)
- .debug_str     0x00000000000003fc       0xb7 build/keyboard.o
-                                        0x1cb (size before relaxing)
- .debug_str     0x00000000000004b3        0xc build/scancodes.o
+ .debug_str     0x00000000000002b0      0x164 build/interrupt.o
+                                        0x2ac (size before relaxing)
+ .debug_str     0x0000000000000414       0xb7 build/keyboard.o
+                                        0x1e3 (size before relaxing)
+ .debug_str     0x00000000000004cb        0xc build/scancodes.o
                                          0x93 (size before relaxing)
- .debug_str     0x00000000000004bf       0x6f build/rtc.o
+ .debug_str     0x00000000000004d7       0x6f build/rtc.o
                                         0x191 (size before relaxing)
- .debug_str     0x000000000000052e      0x1b2 build/floppy.o
+ .debug_str     0x0000000000000546      0x1b2 build/floppy.o
                                         0x308 (size before relaxing)
- .debug_str     0x00000000000006e0      0x30d build/fat.o
+ .debug_str     0x00000000000006f8      0x30d build/fat.o
                                         0x49c (size before relaxing)
- .debug_str     0x00000000000009ed       0xaa build/string.o
+ .debug_str     0x0000000000000a05       0xaa build/string.o
                                         0x194 (size before relaxing)
 
 .comment        0x0000000000000000       0x1a
@@ -353,23 +355,24 @@ OUTPUT(build/kernel.elf elf32-i386)
  .note.GNU-stack
                 0x0000000000000000        0x0 build/string.o
 
-.bss            0x0000000000021c20    0x51320 load address 0x0000000000301c20
- COMMON         0x0000000000021c20    0x406f0 build/main.o
-                0x0000000000021c20                fat
-                0x0000000000024020                callShell
-                0x0000000000024040                root_dir
-                0x0000000000025e40                tmpPtr
-                0x0000000000025e60                root_dir_entries
- COMMON         0x0000000000062310        0x2 build/video.o
-                0x0000000000062310                video_base
- *fill*         0x0000000000062312        0xe 
- COMMON         0x0000000000062320      0x820 build/interrupt.o
-                0x0000000000062320                echo_byte
-                0x0000000000062340                IDT
- COMMON         0x0000000000062b40    0x10000 build/floppy.o
-                0x0000000000062b40                floppyBuffer
- COMMON         0x0000000000072b40      0x400 build/fat.o
-                0x0000000000072b40                tempDirBuffer
+.bss            0x0000000000021c20    0x51340 load address 0x0000000000301c20
+ COMMON         0x0000000000021c20    0x40710 build/main.o
+                0x0000000000021c20                nextChar
+                0x0000000000021c40                fat
+                0x0000000000024040                callShell
+                0x0000000000024060                root_dir
+                0x0000000000025e60                tmpPtr
+                0x0000000000025e80                root_dir_entries
+ COMMON         0x0000000000062330        0x2 build/video.o
+                0x0000000000062330                video_base
+ *fill*         0x0000000000062332        0xe 
+ COMMON         0x0000000000062340      0x820 build/interrupt.o
+                0x0000000000062340                echo_byte
+                0x0000000000062360                IDT
+ COMMON         0x0000000000062b60    0x10000 build/floppy.o
+                0x0000000000062b60                floppyBuffer
+ COMMON         0x0000000000072b60      0x400 build/fat.o
+                0x0000000000072b60                tempDirBuffer
 
 .debug_pubnames
                 0x0000000000000000       0x12

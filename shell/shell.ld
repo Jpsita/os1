@@ -3,8 +3,8 @@ SEARCH_DIR("../libKernel/build");
 SECTIONS
 {
 
-	. = 0x80000;
-	.text : AT(0x80000){
+	. = 0x10000;
+	.text : AT(0x10000){
 		build/shell.o(.text);
 		build/shell.o(.data);
 		build/shell.o(.bss);

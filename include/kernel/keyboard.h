@@ -1,6 +1,8 @@
 #ifndef __JPS_KEYBOARD_H
 #define __JPS_KEYBOARD_H
 
+#include "main.h"
+
 #define PS2_DATA_PORT	0x60
 #define PS2_COMM_PORT	0x64
 
@@ -32,4 +34,11 @@ char scancodeToAscii(unsigned char sc);
 void init_keyboard();
 
 char getCh();
+
+#define KEY_BUFFER_SIZE		1024
+
+uint8_t* nextChar;
+extern uint8_t* keyboardBuffer;
+
+
 #endif
