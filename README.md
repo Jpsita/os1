@@ -39,7 +39,14 @@ To build a bootable image file (images/floppy.img) run
  (sudo) make install
 ````
 
-_Note:_ You may need SuperUser permissions to mount and unmount the image. This is needed to make linux handle FAT12 copying of files.
+_Note:_ You may need SuperUser permissions to mount and unmount the image. This is needed to make linux handle FAT12 copying of files.  
+
+__To update the image file, run__
+
+````
+ (sudo) make uninstall
+ (sudo) make install
+````
 
 ## Running and Debugging
 
@@ -53,9 +60,9 @@ To debug the OS, the GNU Debugger (GDB) is also needed.
 
 The included _debug.sh_ script uses GDB and TMUX, however, symbol files in DWARF format are automatically built and are available for manual debugging in these directories:
 
-__loader/build__
-
-__kernel/build__
+__loader/symbols__  
+__kernel/symbols__  
+__shell/symbols__ (includes __libKernel__ symbols)
 
 ## License
 
