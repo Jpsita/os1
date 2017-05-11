@@ -51,9 +51,6 @@ uint32_t loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, u
 		fat_value = readFatentry(fat, cluster);
 		if(fat_value != 0xFF7){
 			uint16_t sector_id = fat->data_offset_secs + cluster - 2;
-			printString("Reading sector: ");
-			printUint32(sector_id);
-			printString("\n");
 			floppy_read(sector_id, (sector_id == 0x38) ? 1024 : 512, buffer + redBytes); //Bug in qemu code? Sector 0x38 alone is not read correctly
 		}else{
 			cluster++;
@@ -140,9 +137,6 @@ uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, ui
 		uint8_t pth[64];
 		pth[0] = 0;
 		substr(path, pth, 1, pos);
-		printString(">Looking for ");
-		printString(pth);
-		printString(": ");
 		for (int i = 0; i < n_entries; i++) {
 			if (strcmp(output[i].long_name, pth) == 0) {
 				found = 1;
@@ -150,11 +144,9 @@ uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, ui
 			}
 		}
 		if (found == 0) {
-			printString("Not Found\n");
 			return ~0;
 		}
 		else {
-			printString("Found!\n");
 			n_entries = 0;
 			ent = output;
 			if ((enx.attributes && 0x10) > 0) {

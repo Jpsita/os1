@@ -37,8 +37,15 @@ char getCh();
 
 #define KEY_BUFFER_SIZE		1024
 
-uint8_t* nextChar;
-extern uint8_t* keyboardBuffer;
+extern	uint8_t* nextChar;
+extern	uint8_t* nextRead;
+extern	uint8_t* keyboardBuffer;
 
+char buff_getCh();
+char buff_getCharacter();
+void buff_getString(uint8_t* string);
+void buff_getStringTrm(uint8_t* string, char terminator);
+void buff_clean();
+void buff_addChar(char c);
 
 #endif

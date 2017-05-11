@@ -8,6 +8,11 @@
 unsigned char KEYB_STATUS_BYTE = 0;
 uint8_t currentChar = 0;
 
+uint8_t* keyboardBuffer;
+uint8_t* nextChar;
+uint8_t* nextRead;
+uint8_t* keyboardBufferEnd;
+
 int isShift(){
 	if(KEYB_STATUS_BYTE & STATUS_BIT_SHIFT){
 		return 1;
@@ -49,15 +54,22 @@ char scancodeToAscii(unsigned char sc){
 void parseKey(short int key){
 	switch(key){
 		case KEY_BKSP:
-			deleteCurrentChar();
+			if(echo_byte != 0)
+				deleteCurrentChar();
+			buff_addChar((char) 8);
 			break;
 		case KEY_TAB:
-			printTab();
+			if(echo_byte != 0)
+				printTab();
+			buff_addChar('\t');
 			break;
 		case KEY_ESC:
+			buff_addChar((char) 27);
 			break;
 		case KEY_RETURN:
-			newLine();
+			if(echo_byte != 0)
+				newLine();
+			buff_addChar('\n');
 			break;
 		case KEY_CTRL:
 			doCtrl();
@@ -69,7 +81,9 @@ void parseKey(short int key){
 			break;
 		default:
 			currentChar = (uint8_t) key;
-			printCharacter(key);
+			if(echo_byte != 0)
+				printCharacter(key);
+			buff_addChar(key);
 	}
 }
 
@@ -136,6 +150,10 @@ void init_keyboard(){
 		x = inb(PS2_DATA_PORT);	
 		//printCharacter('r');
 	}
+	keyboardBuffer = (uint8_t*) 0xBA00;
+	keyboardBufferEnd = (uint8_t*) 0xBE00;
+	nextChar = keyboardBuffer + 1;
+	nextRead = keyboardBuffer;
 }
 
 char getCh(){
@@ -144,4 +162,71 @@ char getCh(){
 	}
 	red = 0;
 	return currentChar;
+}
+
+void buff_addChar(char c){
+	*nextChar = c;
+
+	nextChar++;
+	if(nextChar == nextRead){
+		printString("WARNING: Keyboard Buffer overflow\n");
+	}
+	if(nextChar == keyboardBufferEnd){
+		nextChar = keyboardBuffer;
+	}
+	*nextChar = 0;
+}
+
+void buff_clean(){
+	nextChar = keyboardBuffer;
+	nextRead = keyboardBuffer;
+	*keyboardBuffer = 0;
+}
+
+char nextCh(){
+	if(*nextRead != 0){
+		char c = *nextRead;
+		*nextRead = 0;
+		nextRead++;
+		if(nextRead == keyboardBufferEnd){
+			nextRead = keyboardBuffer;
+		}
+		return c;
+	}
+	return 0;
+}
+
+char buff_getCh(){
+	char c;
+	do{
+		c = nextCh();
+		if(c == 0){
+			sleepMs(100);
+		}else{
+			return c;
+		}
+	}while(c == 0);
+	return 0;
+}
+
+char buff_getCharacter(){
+	return nextCh();
+}
+
+void buff_getString(uint8_t* string){
+	buff_getStringTrm(string, '\n');
+}
+
+void buff_getStringTrm(uint8_t* string, char terminator){
+	char c;
+	do{
+		c = nextCh();
+		if(c == 0 || c == terminator){
+			return;
+		}else{
+			*string = c;
+			string++;
+			*string = 0;
+		}
+	}while(c != 0 && c != terminator);
 }

@@ -2,6 +2,7 @@
 #include "keyboard.h"
 #include "utils.h"
 #include "video.h"
+#include "string.h"
 #include "functionIds.h"
 
 IDTDescr IDT[256];
@@ -68,15 +69,15 @@ void handle_irq_1(){
 	}
 	if(x >= 128){
 		char k = scancodeToAscii(x - 128);
-		if(echo_byte != 0)
+		//if(echo_byte != 0)
 			parseKeyOff(k);
 		return;
 	}
 	char k = scancodeToAscii(x);
 	red = 1;
-	if(echo_byte != 0){
-		parseKey(k);
-	}
+	//if(echo_byte != 0){
+	parseKey(k);
+	//}
 }
 
 
@@ -183,6 +184,7 @@ void enable_echo(){
 
 uint32_t handle_int_49(uint32_t id){
 	switch(id){
+		//video
 		case PRINTCHARACTERATPOS_ID:
 			return (uint32_t) &printCharacterAtPos;
 		case CLEARSCREEN_ID:
@@ -193,8 +195,40 @@ uint32_t handle_int_49(uint32_t id){
 			return (uint32_t) &newLine;
 		case DELETECURRENTCHAR_ID:
 			return (uint32_t) &deleteCurrentChar;
+		case PRINTCHARACTER_ID:
+			return (uint32_t) &printCharacter;
 		case PRINTSTRING_ID:
 			return (uint32_t) &printString;
+		//keyboard
+		case BUFF_GETCH_ID:
+			return (uint32_t) &buff_getCh;
+		case BUFF_GETCHARACTER_ID:
+			return (uint32_t) &buff_getCharacter;
+		case BUFF_GETSTRING_ID:
+			return (uint32_t) &buff_getString;
+		case BUFF_GETSTRINGTRM_ID:
+			return (uint32_t) &buff_getStringTrm;
+		case BUFF_CLEAN_ID:
+			return (uint32_t) &buff_clean;
+		//string
+		case STRLEN_ID:
+			return (uint32_t) &strlen;
+		case STRCMP_ID:
+			return (uint32_t) &strcmp;
+		case STRCAT_ID:
+			return (uint32_t) &strcat;
+		case STRCAT_N_ID:
+			return (uint32_t) &strcat_n;
+		case STRCAT_NN_ID:
+			return (uint32_t) &strcat_nn;
+		case STRPOS_ID:
+			return (uint32_t) &strpos;
+		case STRPOS_S_ID:
+			return (uint32_t) &strpos_s;
+		case SUBSTR_ID:
+			return (uint32_t) &substr;
+		case STRADD_ID:
+			return (uint32_t) &stradd;
 	}
 	return 0;
 }

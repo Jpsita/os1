@@ -53,5 +53,6 @@ void disable_echo();
 void enable_echo();
 
 extern char red; 
+extern char echo_byte;
 
 #endif

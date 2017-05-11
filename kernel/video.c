@@ -49,6 +49,8 @@ void clearScreen(){
 		*tmp++ = COLOR_WHITE_BLACK;
 	}
 	updateCursor();
+	posX = 0;
+	posY = 0;
 }
 
 //3

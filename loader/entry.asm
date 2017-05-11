@@ -163,13 +163,13 @@ startup:
 
 
 	PUSHA
-	MOV DX, 0x0
+	MOV DX, 0x0	;High buffer
 	PUSH DX
-	MOV CX, 0x8e00
+	MOV CX, 0x8e00	;low buffer
 	PUSH CX
-	MOV BX, 0x16
+	MOV BX, 0x18	;number of sectors to read
 	PUSH BX
-	MOV EAX, 0x23
+	MOV EAX, 0x23	;starting sector
 	PUSH EAX
 rd2:
 	CALL read
