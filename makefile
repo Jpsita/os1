@@ -3,6 +3,7 @@ LOADER_DIR = loader
 SHELL_DIR = shell
 LIBKERNEL_DIR = libKernel
 ROOT_DIR=$(shell pwd)
+ELFLOADER_DIR = elfloader
 export
 
 .PHONY: build
@@ -12,14 +13,14 @@ build:
 	$(MAKE) -C $(KERNEL_DIR)
 	$(MAKE) -C $(LIBKERNEL_DIR)
 	$(MAKE) -C $(SHELL_DIR)
-
+	$(MAKE) -C $(ELFLOADER_DIR)
 clean:
 	rm -rf images/*
 	$(MAKE) -C $(LOADER_DIR) clean
 	$(MAKE) -C $(KERNEL_DIR) clean
 	$(MAKE) -C $(LIBKERNEL_DIR) clean
 	$(MAKE) -C $(SHELL_DIR) clean
-
+	$(MAKE) -C $(ELFLOADER_DIR) clean
 
 configure:
 	mkdir -p images
@@ -27,6 +28,7 @@ configure:
 	$(MAKE) -C $(KERNEL_DIR) configure
 	$(MAKE) -C $(LIBKERNEL_DIR) configure
 	$(MAKE) -C $(SHELL_DIR) configure
+	$(MAKE) -C $(ELFLOADER_DIR) configure
 
 pack: images/floppy.img loader/build/bootloader.bin 
 	dd if=./loader/build/bootloader.bin of=./images/floppy.img conv=notrunc bs=512
