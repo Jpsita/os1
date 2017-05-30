@@ -1,0 +1,4 @@
+
+void entryElf(){
+	return;
+}
