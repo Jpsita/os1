@@ -9,6 +9,11 @@ SECTIONS
 		build/main.o(.bss);
 		build/main.o(.rodata);
 		build/main.o(.rel.text);
+		build/elfFuncs.o(.text);
+		build/elfFuncs.o(.data);
+		build/elfFuncs.o(.bss);
+		build/elfFuncs.o(.rodata);
+		build/elfFuncs.o(.rel.text);
 		libkernel.a(.text);
 		libkernel.a(.data);
 		libkernel.a(.bss);
