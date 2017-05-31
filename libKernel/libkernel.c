@@ -129,3 +129,36 @@ void s_stradd(uint8_t* string, uint8_t chr){
     GET_KERNEL_FUNCTION(_stradd, STRADD_ID)
     _stradd(string, chr);
 }
+
+/* FAT */
+
+FAT_IMPL (*_initializeFAT)(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBuffetrSize);
+
+uint16_t (*_listFilesFAT)(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, uint16_t num_entries);
+uint32_t (*_loadFileFromCluster)(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, uint32_t bufferSize);
+
+FAT_IMPL* _libk_floppy_fat = 0;
+
+FAT_IMPL f_initializeFAT(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBufferSize){
+    GET_KERNEL_FUNCTION(_initializeFAT, INITIALIZEFAT_ID);
+    return _initializeFAT(isFloppy, buffer, bufferSize, dirBuffer, dirBufferSize);
+}
+uint16_t f_listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, uint16_t num_entries){
+    GET_KERNEL_FUNCTION(_listFilesFAT, LISTFILESFAT_ID);
+    return _listFilesFAT(fat, path, output, num_entries);
+}
+
+uint32_t f_loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, uint32_t bufferSize){
+    GET_KERNEL_FUNCTION(_loadFileFromCluster, LOADFILEFROMCLUSTER_ID);
+    return _loadFileFromCluster(fat, cluster, buffer, bufferSize);
+}
+
+FAT_IMPL* f_getFAT(){
+    _libk_floppy_fat = util_int49(RES_DEFAULTFAT_ID);
+    return _libk_floppy_fat;
+}
+
+uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferSize){
+    FAT_DIR_LN_ENTRY dir[64];
+
+}

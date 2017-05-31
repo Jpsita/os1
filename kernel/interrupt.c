@@ -4,6 +4,8 @@
 #include "video.h"
 #include "string.h"
 #include "functionIds.h"
+#include "fat.h"
+#include "kerneldefs.h"
 
 IDTDescr IDT[256];
 char echo_byte;
@@ -229,6 +231,15 @@ uint32_t handle_int_49(uint32_t id){
 			return (uint32_t) &substr;
 		case STRADD_ID:
 			return (uint32_t) &stradd;
+		//FAT
+		case INITIALIZEFAT_ID:
+			return (uint32_t) &initializeFAT;
+		case LISTFILESFAT_ID:
+			return (uint32_t) &listFilesFAT;
+		case LOADFILEFROMCLUSTER_ID:
+			return (uint32_t) &loadFileFromCluster;
+		case RES_DEFAULTFAT_ID:
+			return (uint32_t) &fa_impl;
 	}
 	return 0;
 }
