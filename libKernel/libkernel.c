@@ -182,13 +182,13 @@ uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferS
     uint16_t res = f_listFilesFAT(fat, buff, dir, 64);
     uint32_t cluster = 0;
     for(int i = 0; i < res; i++){
-        if(s_strcmp(res[i].long_name, fileName) == 0){
-            cluster = res[i].cluster;
+        if(s_strcmp(dir[i].long_name, fileName) == 0){
+            cluster = dir[i].cluster;
             break;
         }
     }
     if(cluster == 0){
         return ~0;
     }
-    return loadFileFromCluster(fat, (uint16_t) cluster, buffer, bufferSize);
+    return f_loadFileFromCluster(fat, (uint16_t) cluster, buffer, bufferSize);
 }
