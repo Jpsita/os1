@@ -7,6 +7,7 @@
 #include "rtc.h"
 #include "fat.h"
 #include "string.h"
+#include "kerneldefs.h"
 
 extern uint8_t fat[];
 extern uint8_t root_dir[];
@@ -29,12 +30,12 @@ void entryc(){
 	floppy_init();
 
 	printString("os1 Booting...\n");
-	FAT_IMPL fatImpl = initializeFAT(1, fat, 18*512, root_dir, 240 * 32);
-	if(fatImpl.fat == 0){
+	fa_impl = initializeFAT(1, fat, 18*512, root_dir, 240 * 32);
+	if(fa_impl.fat == 0){
 		printString("Error loading FAT. Buffer too small\n");
 	}
 	printString("Reading directory '/':\n");
-	uint16_t n_ent = listFilesFAT(&fatImpl, "/", root_dir_entries, 240);
+	uint16_t n_ent = listFilesFAT(&fa_impl, "/", root_dir_entries, 240);
 	if(n_ent == 0){
 		printString("Error: empty folder! (But then, where the fuck did you load me from?)\n");
 		while(1){
@@ -55,7 +56,7 @@ void entryc(){
 			printString("Loading Shell...\n");
 			//enable_echo();
 			tmpPtr = (uint8_t*) 0x10000;
-			uint32_t size = loadFileFromCluster(&fatImpl, root_dir_entries[i].cluster, tmpPtr, 0xE00);
+			uint32_t size = loadFileFromCluster(&fa_impl, root_dir_entries[i].cluster, tmpPtr, 0xE00);
 			printUint32(size);
 			//printString("Size: ");
 			//printUint32(size);
@@ -76,3 +77,4 @@ void entryc(){
 uint8_t fat[18 * 512];
 uint8_t root_dir[240 * 32];
 FAT_DIR_LN_ENTRY	root_dir_entries[240];
+FAT_IMPL			fa_impl;
