@@ -174,8 +174,21 @@ uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferS
     FAT_DIR_LN_ENTRY dir[64];
     uint32_t pos = 0;
     s_strpos_r(path, '/');
+    uint32_t len = s_strlen(path);
     uint8_t buff[128];
-    s_substr(path, buff, 0, pos);
-    uint16_t res = f_listFilesFAT(_libk_floppy_fat, buff, dir, 64);
-    
+    uint8_t fileName[128];
+    s_substr(path, fileName, pos + 1, len);
+    s_substr(path, buff, 0, pos + 1);
+    uint16_t res = f_listFilesFAT(fat, buff, dir, 64);
+    uint32_t cluster = 0;
+    for(int i = 0; i < res; i++){
+        if(s_strcmp(res[i].long_name, fileName) == 0){
+            cluster = res[i].cluster;
+            break;
+        }
+    }
+    if(cluster == 0){
+        return ~0;
+    }
+    return loadFileFromCluster(fat, (uint16_t) cluster, buffer, bufferSize);
 }
