@@ -231,6 +231,11 @@ uint32_t handle_int_49(uint32_t id){
 			return (uint32_t) &substr;
 		case STRADD_ID:
 			return (uint32_t) &stradd;
+		case STRPOS_R_ID:
+			return (uint32_t) &strpos_r;
+		case STRPOS_RS_ID:
+			return (uint32_t) &strpos_rs;
+
 		//FAT
 		case INITIALIZEFAT_ID:
 			return (uint32_t) &initializeFAT;

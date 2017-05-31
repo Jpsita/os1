@@ -89,6 +89,8 @@ uint32_t (*_strpos_s)(uint8_t* string, uint8_t needle, uint32_t start) = 0;
 uint32_t (*_strpos)(uint8_t* string, uint8_t needle) = 0;
 uint32_t (*_substr)(uint8_t* string, uint8_t* buffer, uint32_t start, uint32_t end) = 0;
 void (*_stradd)(uint8_t* string, uint8_t chr) = 0;
+uint32_t (*_strpos_rs)(uint8_t* string, uint8_t neelde, uint32_t start) = 0;
+uint32_t (*_strpos_r)(uint8_t* string, uint8_t neelde) = 0;
 
 uint32_t s_strlen(uint8_t* string){
     GET_KERNEL_FUNCTION(_strlen, STRLEN_ID)
@@ -130,6 +132,16 @@ void s_stradd(uint8_t* string, uint8_t chr){
     _stradd(string, chr);
 }
 
+uint32_t s_strpos_rs(uint8_t* string, uint8_t needle, uint32_t start){
+    GET_KERNEL_FUNCTION(_strpos_rs, STRPOS_RS_ID);
+    return _strpos_rs(string, needle, start);
+}
+
+uint32_t s_strpos_r(uint8_t* string, uint8_t needle){
+    GET_KERNEL_FUNCTION(_strpos_r, STRPOS_R_ID);
+    return _strpos_r(string, needle);
+}
+
 /* FAT */
 
 FAT_IMPL (*_initializeFAT)(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBuffetrSize);
@@ -160,5 +172,10 @@ FAT_IMPL* f_getFAT(){
 
 uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferSize){
     FAT_DIR_LN_ENTRY dir[64];
-
+    uint32_t pos = 0;
+    s_strpos_r(path, '/');
+    uint8_t buff[128];
+    s_substr(path, buff, 0, pos);
+    uint16_t res = f_listFilesFAT(_libk_floppy_fat, buff, dir, 64);
+    
 }

@@ -32,6 +32,8 @@
 #define SUBSTR_ID				207
 #define STRADD_ID				208
 
+#define STRPOS_R_ID				209
+#define STRPOS_RS_ID			210
 
 //300-399: FAT
 

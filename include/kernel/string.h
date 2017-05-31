@@ -15,5 +15,6 @@ uint32_t strpos_s(uint8_t* string, uint8_t needle, uint32_t start);
 uint32_t strpos(uint8_t* string, uint8_t needle);
 uint32_t substr(uint8_t* string, uint8_t* buffer, uint32_t start, uint32_t end);
 void stradd(uint8_t* string, uint8_t chr);
-
+uint32_t strpos_rs(uint8_t* string, uint8_t neelde, uint32_t start);
+uint32_t strpos_r(uint8_t* string, uint8_t neelde);
 #endif
