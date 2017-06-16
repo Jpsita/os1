@@ -1,6 +1,8 @@
 add-symbol-file loader/symbols/bootloader.sym 0x7C00
 add-symbol-file kernel/symbols/kernel.sym 0x8e00
-add-symbol-file shell/symbols/shell.sym 0x10000
-target remote :1234
-# directory ~/devel/os1
+add-symbol-file shell/symbols/shell.sym 0x33200
+
 set disassembly-flavor intel
+
+target remote | qemu-system-i386 -fda images/floppy.img -S -gdb stdio -m 512M -D qemu.log -d in_asm,int,guest_errors,unimp
+# directory ~/devel/os1

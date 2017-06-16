@@ -11,22 +11,22 @@
 
 extern uint8_t fat[];
 extern uint8_t root_dir[];
-extern FAT_DIR_LN_ENTRY root_dir_entries[];
+extern FAT_DIR_LN_ENTRY root_dir_entries[240];
 extern FAT_DIR_LN_ENTRY test_dir_entries[];
 
-uint8_t* tmpPtr;
+extern uint8_t* tmpPtr;
 
-void (*callShell)();
+extern void (*callShell)();
 
 void entryc(){
 	loadVideoPort();
 
 	PIC_remap(0x20, 0x28);
-	
+
 	create_IDT();
-	
+
 	init_RTC();
-	
+
 	floppy_init();
 
 	printString("os1 Booting...\n");
@@ -47,32 +47,40 @@ void entryc(){
 			sleepMs(1000);
 		}
 	}
+	int shell_id = -1;
 	for(int i = 0; i < n_ent; i++){
 		printString("> ");
 		printString(root_dir_entries[i].long_name);
 		printString("\n");
 		if(strcmp((uint8_t*) root_dir_entries[i].long_name, "SHELL.RNB") == 0){
-
-			printString("Loading Shell...\n");
-			//enable_echo();
-			tmpPtr = (uint8_t*) 0x10000;
-			uint32_t size = loadFileFromCluster(&fa_impl, root_dir_entries[i].cluster, tmpPtr, 0xE00);
-			printUint32(size);
-			//printString("Size: ");
-			//printUint32(size);
-			//floppy_read(0x38, 1024, tmpPtr);
-			//enable_echo();
-			callShell = (void (*)) 0x10000;
-			callShell();
-			break;
+			shell_id = i;
 		}
 	}
-	printString("Shell not found.\n");
+	if(shell_id != -1){
+		printString("Loading Shell...\n");
+		//enable_echo();
+		tmpPtr = (uint8_t*) 0x33200;
+		uint32_t size = loadFileFromCluster(&fa_impl, root_dir_entries[shell_id].cluster, tmpPtr, 0xE00);
+		//printUint32(size);
+		//printString("Size: ");
+		//printUint32(size);
+		//floppy_read(0x38, 1024, tmpPtr);
+		//enable_echo();
+		sleepMs(1000);
+		printString("Calling shell...\n");
+		sleepMs(100);
+		callShell = (void (*)) tmpPtr;
+		callShell();
+	}else
+		printString("Shell not found.\n");
 	while(1){
 		//char c = getCh();
 		//printCharacterRead (c);
 	}
 }
+
+uint8_t* tmpPtr;
+void (*callShell)();
 
 uint8_t fat[18 * 512];
 uint8_t root_dir[240 * 32];

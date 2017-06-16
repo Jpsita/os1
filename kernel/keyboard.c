@@ -45,7 +45,7 @@ void unCtrl(){
 
 char scancodeToAscii(unsigned char sc){
 	if(!isShift()){
-		return scancode_tbl[sc - 1]; 
+		return scancode_tbl[sc - 1];
 	}else{
 		return scancode_tbl_shift[sc - 1];
 	}
@@ -114,7 +114,7 @@ void init_keyboard(){
 	while(x == PS2_RSD){
 		PS2_wait();
 		outb(PS2_DATA_PORT, CMD_SCANCODE_SET_GET);
-		x = inb(PS2_DATA_PORT);	
+		x = inb(PS2_DATA_PORT);
 		printCharacter('r');
 	}
 	print_hex(x);
@@ -125,20 +125,20 @@ void init_keyboard(){
 	while(x == PS2_RSD){
 		PS2_wait();
 		outb(PS2_DATA_PORT, PRM_SCANCODE_SET_SC2);
-		x = inb(PS2_DATA_PORT);	
+		x = inb(PS2_DATA_PORT);
 		printCharacter('r');
 	}
 	print_hex(x);
 	printCharacter(' ');
 	*/
-	
+
 	PS2_wait();
 	outb(PS2_DATA_PORT, CMD_LED_CTRL);
 	unsigned  char x = inb(PS2_DATA_PORT);
 	while(x == PS2_RSD){
 		PS2_wait();
 		outb(PS2_DATA_PORT, CMD_LED_CTRL);
-		x = inb(PS2_DATA_PORT);	
+		x = inb(PS2_DATA_PORT);
 		//printCharacter('r');
 	}
 	PS2_wait();
@@ -147,11 +147,11 @@ void init_keyboard(){
 	while(x == PS2_RSD){
 		PS2_wait();
 		outb(PS2_DATA_PORT, LED_SCR_LCK | LED_CAPS_LCK | LED_NUM_LCK);
-		x = inb(PS2_DATA_PORT);	
+		x = inb(PS2_DATA_PORT);
 		//printCharacter('r');
 	}
-	keyboardBuffer = (uint8_t*) 0xBA00;
-	keyboardBufferEnd = (uint8_t*) 0xBE00;
+	keyboardBuffer = (uint8_t*) 0x32E00;
+	keyboardBufferEnd = (uint8_t*) 0x33200;
 	nextChar = keyboardBuffer + 1;
 	nextRead = keyboardBuffer;
 }

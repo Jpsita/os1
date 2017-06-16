@@ -1,6 +1,8 @@
 #ifndef __LEF_ELF_DEFS_H
 #define __LEF_ELF_DEFS_H
 
+#include "libkernel/definitions.h"
+
 typedef	unsigned int	Elf32_Addr;
 typedef unsigned short	Elf32_Half;
 typedef unsigned int 	Elf32_Off;
@@ -8,6 +10,7 @@ typedef	int				Elf32_Sword;
 typedef	unsigned int	Elf32_Word;
 typedef unsigned char	Elf32_Uchar;
 
+typedef int elf32_main(int, char**); 
 
 #define EI_MAG0				0
 #define EI_MAG1				1
@@ -52,11 +55,17 @@ typedef unsigned char	Elf32_Uchar;
 #define EV_NONE				0			//No version
 #define EV_CURRENT			1			//Current (first) version
 
-typedef struct{
+typedef struct PACKED{
 	unsigned char		e_ident[EI_NIDENT]; //Object file Marker
-	Elf32_Half			e_type; 			//Object Type
-	Elf32_Half			e_machine;			//Machine Type
-	Elf32_Word			e_version;			//Object File Version
+	Elf32_Uchar			e_type; 			//Object Architecture()
+	Elf32_Uchar			e_machine;			//Machine Type
+	Elf32_Uchar			e_version;			//Object File Version
+	Elf32_Uchar			e_ABI;				//OS Type (usually 0)
+	Elf32_Word			e_padding0;			//padding
+	Elf32_Word			e_padding1;			//padding
+	Elf32_Half			e_usage;			//object type (executable, relocatable, ecc)
+	Elf32_Half			e_instrSet;			//Instruction set
+	Elf32_Word			e_version2;			//ELF Version (again)
 	Elf32_Addr			e_entry;			//Virtual entry point
 	Elf32_Off			e_phoff;			//Program Header Table Offset (bytes)
 	Elf32_Off			e_shoff;			//Section Header Table Offset (bytes)
@@ -187,13 +196,15 @@ typedef struct{
 #define PT_LOPROC		0x70000000		//		RESERVED FOR
 #define PT_HIPROC		0x7fffffff		//		PROCESSOR SPECIFIC
 
+#define PFLAGS_READ		4
+#define PFLAGS_WRITE	2
+#define PFLAGS_EXEC		1
 
-
-typedef struct {
+typedef struct PACKED {
 	Elf32_Word      p_type;				//Type of segment
 	Elf32_Off       p_offset;			//Offset from beginning of file
 	Elf32_Addr      p_vaddr;			//Segment's Virtual address
-	Elf32_Addr      p_paddr;			//Segment's physical address
+	Elf32_Addr      p_paddr;			//Segment's physical address (not used)
 	Elf32_Word      p_filesz;			//Size in the file image
 	Elf32_Word      p_memsz;			//Size in memory
 	Elf32_Word      p_flags;			//Flags

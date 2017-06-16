@@ -143,9 +143,9 @@ eff_2_ret:
 
 ;-------FUN--------------
 ;WaitLoop16: waits for the keyboard to be ready
-;WaitLoop16:	in     al, 64h       ; Read Status byte 
-;		and    al, 01b       ; Test OBF flag (Status<0>) 
-;		jnz    WaitLoop16    ; Wait for OBF = 0 
+;WaitLoop16:	in     al, 64h       ; Read Status byte
+;		and    al, 01b       ; Test OBF flag (Status<0>)
+;		jnz    WaitLoop16    ; Wait for OBF = 0
 ;		ret
 ;-------END--------------
 
@@ -153,9 +153,9 @@ eff_2_ret:
 ;-------FUN--------------
 ;ReadFATEntry: reads a single FAT12 12bit value from the given address
 ;Params:
-;0 (+2) (16 bit) address: Address of the value to read. 
+;0 (+2) (16 bit) address: Address of the value to read.
 ;Return:
-;AX: Value 
+;AX: Value
 ;-----------------------
 
 
@@ -167,19 +167,19 @@ startup:
 	PUSH DX
 	MOV CX, 0x8e00	;low buffer
 	PUSH CX
-	MOV BX, 0x18	;number of sectors to read
+	MOV BX, 0x17	;number of sectors to read
 	PUSH BX
 	MOV EAX, 0x23	;starting sector
 	PUSH EAX
 rd2:
 	CALL read
 	POPA
-	
+
 
 rdOver:
 	MOV AX, 2h
 	INT 10h
-	
+
 to_protected:
 	MOV EAX, gdt
 	MOV [gdt_offset], EAX

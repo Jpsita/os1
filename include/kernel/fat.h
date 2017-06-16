@@ -39,7 +39,6 @@ typedef struct PACKED{
 	uint8_t		attributes;
 	uint16_t	cluster;
 	uint16_t	n_entries;
-	void*		entries[240];
 } FAT_DIR_LN_ENTRY;
 
 typedef struct PACKED{

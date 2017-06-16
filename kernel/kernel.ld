@@ -13,50 +13,74 @@ SECTIONS
 		build/floppy.o(.text);
 		build/fat.o(.text);
 		build/string.o(.text);
-		build/main.o(.data);
-		build/main.o(.bss);
+
+
 		build/main.o(.rodata);
 		build/main.o(.rel.text);
-		build/utils.o(.data);
-		build/utils.o(.bss);
+
+
 		build/utils.o(.rodata);
 		build/utils.o(.rel.text);
-		build/video.o(.data);
-		build/video.o(.bss);
+
+
 		build/video.o(.rodata);
 		build/video.o(.rel.text);
-		build/interrupt.o(.data);
-		build/interrupt.o(.bss);
+
+
 		build/interrupt.o(.rodata);
 		build/interrupt.o(.rel.text);
-		build/keyboard.o(.data);
-		build/keyboard.o(.bss);
+
+
 		build/keyboard.o(.rodata);
 		build/keyboard.o(.rel.text);
-		build/scancodes.o(.data);
+
+
 		build/scancodes.o(.rodata);
-		build/scancodes.o(.bss);
 		build/scancodes.o(.rel.text);
-		build/rtc.o(.data);
-		build/rtc.o(.bss);
+
+
 		build/rtc.o(.rodata);
 		build/rtc.o(.rel.text);
-		build/floppy.o(.data);
-		build/floppy.o(.bss);
+
+
 		build/floppy.o(.rodata);
 		build/floppy.o(.rel.text);
-		build/fat.o(.data);
-		build/fat.o(.bss);
+
+
 		build/fat.o(.rodata);
 		build/fat.o(.rel.text);
-		build/string.o(.data);
-		build/string.o(.bss);
+
+
 		build/string.o(.rodata);
 		build/string.o(.rel.text);
 	}
-	. = 0x21200;
-	.eh_frame : AT(0x301200) {
+	.data : {
+		build/main.o(.data);
+		build/utils.o(.data);
+		build/video.o(.data);
+		build/interrupt.o(.data);
+		build/keyboard.o(.data);
+		build/scancodes.o(.data);
+		build/rtc.o(.data);
+		build/floppy.o(.data);
+		build/fat.o(.data);
+		build/string.o(.data);
+	}
+	.bss : {
+		build/main.o(.bss);
+		build/utils.o(.bss);
+		build/video.o(.bss);
+		build/interrupt.o(.bss);
+		build/keyboard.o(.bss);
+		build/scancodes.o(.bss);
+		build/rtc.o(.bss);
+		build/floppy.o(.bss);
+		build/fat.o(.bss);
+		build/string.o(.bss);
+	}
+	. = 0x801200;
+	.eh_frame : AT(0x801200) {
 		*.*(.eh_frame);
 	}
-	
+
 }

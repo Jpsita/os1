@@ -2,6 +2,7 @@
 #include "libkernel/video.h"
 #include "libkernel/keyboard.h"
 #include "libkernel/string.h"
+#include "libkernel/fat.h"
 
 uint8_t	currentPath[256];
 uint8_t commandLine[256];
@@ -11,6 +12,9 @@ void printLine();
 void parseLine();
 
 void entryShell(){
+	v_printString("Shell loaded\n Starting ELF Loader\n");
+	FAT_IMPL* ft = f_getFAT();
+	f_loadFile(ft, "/elfl.rnb", (uint8_t*) 0x34E00, 0x1C00);
 	s_strcpy("/", currentPath);
 	commandLine[0] = 0;
 	v_clear();
@@ -39,12 +43,12 @@ void entryShell(){
 			case CHAR_NEWLINE:
 				parseLine();
 				printLine();
-				break;				
+				break;
 			default:
 				lineWidth++;
 				s_stradd(commandLine, c);
 				v_printCharacter(c);
-		}	
+		}
 	}
 	v_printString("Quitting shell...");
 }

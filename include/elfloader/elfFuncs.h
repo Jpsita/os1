@@ -6,4 +6,5 @@
 
 uint32_t is_header_valid(Elf32_Ehdr* header);
 
+
 #endif
