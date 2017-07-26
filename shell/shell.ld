@@ -3,21 +3,34 @@ SEARCH_DIR("../libKernel/build");
 SECTIONS
 {
 
-	. = 0x14000;
-	.text : AT(0x14000){
+	. = 0x33200;
+	.text : AT(0x33200){
 		build/shell.o(.text);
-		build/shell.o(.data);
-		build/shell.o(.bss);
-		build/shell.o(.rodata);
 		build/shell.o(.rel.text);
-		libkernel.a(.text);
-		libkernel.a(.data);
-		libkernel.a(.bss);
-		libkernel.a(.rodata);
-		libkernel.a(.rel.text);
+		libkernel.o(.text);
+		utils.o(.text);
+		libkernel.o(.rel.text);
+		utils.o(.rel.text);
+	}
+	.data : {
+		build/shell.o(.data);
+		libkernel.o(.data);
+		utils.o(.data);
+	}
+	.rodata : {
+		build/shell.o(.rodata);
+		libkernel.o(.rodata);
+		utils.o(.rodata);
+	}
+	.bss : {
+		build/shell.o(.bss);
+		libkernel.o(.bss);
+		utils.o(.bss);
 	}
 	. = 0x120000;
 	.eh_frame : AT(0x120000) {
-		*.*(.eh_frame);
+		build/shell.o(.eh_frame);
+		libkernel.o(.eh_frame);
+		utils.o(.eh_frame);
 	}
 }

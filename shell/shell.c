@@ -4,17 +4,15 @@
 #include "libkernel/string.h"
 #include "libkernel/fat.h"
 
-uint8_t	currentPath[256];
-uint8_t commandLine[256];
-uint32_t lineWidth = 0;
+extern uint8_t	currentPath[];
+extern uint8_t commandLine[];
+extern uint32_t lineWidth;
+extern FAT_IMPL *ft;
 
-void printLine();
-void parseLine();
+extern void printLine();
+extern void parseLine();
 
 void entryShell(){
-	v_printString("Shell loaded\n Starting ELF Loader\n");
-	FAT_IMPL* ft = f_getFAT();
-	f_loadFile(ft, "/elfl.rnb", (uint8_t*) 0x34E00, 0x1C00);
 	s_strcpy("/", currentPath);
 	commandLine[0] = 0;
 	v_clear();
@@ -76,6 +74,10 @@ void parseLine(){
 		v_clear();
 		commandLine[0] = 0;
 		return;
+	}else if(s_strcmp(commandLine, "lelf") == 0){
+		v_printString("Trying to load ELF Loader");
+		ft = f_getFAT();
+		f_loadFile(ft, "/elfl.rnb", (uint8_t*) 0x34E00, 0x1C00);
 	}else{
 		v_printString("Unknown command: '");
 		v_printString(commandLine);
@@ -84,3 +86,8 @@ void parseLine(){
 	commandLine[0] = 0;
 	v_printString("\n");
 }
+
+uint8_t	currentPath[256];
+uint8_t commandLine[256];
+uint32_t lineWidth = 0;
+FAT_IMPL *ft;

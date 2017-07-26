@@ -14,15 +14,23 @@ SECTIONS
 		build/elfFuncs.o(.bss);
 		build/elfFuncs.o(.rodata);
 		build/elfFuncs.o(.rel.text);
-		libkernel.a(.text);
-		libkernel.a(.data);
-		libkernel.a(.bss);
-		libkernel.a(.rodata);
-		libkernel.a(.rel.text);
+		libkernel.o(.text);
+		libkernel.o(.data);
+		libkernel.o(.bss);
+		libkernel.o(.rodata);
+		libkernel.o(.rel.text);
+		utils.o(.text);
+		utils.o(.data);
+		utils.o(.bss);
+		utils.o(.rodata);
+		utils.o(.rel.text);
 	}
 
 	. = 0x120000;
 	.eh_frame : AT(0x120000) {
-		*.*(.eh_frame);
+		build/main.o(.eh_frame);
+		build/elfFuncs.o(.eh_frame);
+		libkernel.o(.eh_frame);
+		utils.o(.eh_frame);
 	}
 }

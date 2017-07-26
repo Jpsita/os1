@@ -1,9 +1,9 @@
 INC=$(ROOT_DIR)/include
 
-build: build/libkernel.a
+build: build/libkernel.o build/utils.o
 
-build/libkernel.a: build/libkernel.o build/utils.o
-	$(TARGET)-ar rcs build/libkernel.a build/libkernel.o build/utils.o
+# build/libkernel.a: build/libkernel.o build/utils.o
+#	$(TARGET)-ar rcs build/libkernel.a build/libkernel.o build/utils.o --target elf32-i386
 build/libkernel.o: libkernel.c $(INC)/libkernel.h
 	$(TARGET)-gcc -c libkernel.c -I $(INC) -o build/libkernel.o -m32 -mtune=i386 -gdwarf $(MY_CFLAGS)
 build/utils.o: utils.asm $(INC)/libkernel/utils.h

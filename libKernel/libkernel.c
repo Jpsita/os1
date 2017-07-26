@@ -170,25 +170,38 @@ FAT_IMPL* f_getFAT(){
     return _libk_floppy_fat;
 }
 
+uint8_t _loadFile_buff[128];
+uint8_t _loadFile_fileName[128];
+FAT_DIR_LN_ENTRY _loadFile_dir[64];
+
 uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferSize){
-    FAT_DIR_LN_ENTRY dir[64];
     uint32_t pos = 0;
     s_strpos_r(path, '/');
     uint32_t len = s_strlen(path);
-    uint8_t buff[128];
-    uint8_t fileName[128];
-    s_substr(path, fileName, pos + 1, len);
-    s_substr(path, buff, 0, pos + 1);
-    uint16_t res = f_listFilesFAT(fat, buff, dir, 64);
+    s_substr(path, _loadFile_fileName, pos + 1, len);
+    s_substr(path, _loadFile_buff, 0, pos + 1);
+    uint16_t res = f_listFilesFAT(fat, _loadFile_buff, _loadFile_dir, 64);
     uint32_t cluster = 0;
     for(int i = 0; i < res; i++){
-        if(s_strcmp(dir[i].long_name, fileName) == 0){
-            cluster = dir[i].cluster;
+        if(s_strcmp(_loadFile_dir[i].long_name, _loadFile_fileName) == 0){
+            cluster = _loadFile_dir[i].cluster;
             break;
         }
     }
     if(cluster == 0){
+        for(int i = 0; i < 128; i++){
+            _loadFile_buff[i] = 0;
+            _loadFile_fileName[i] = 0;
+        }
         return ~0;
+    }
+    for(int i = 0; i < 128; i++){
+        _loadFile_buff[i] = 0;
+        _loadFile_fileName[i] = 0;
+    }
+    uint8_t* tmp = (uint8_t*) _loadFile_dir;
+    for(int i = 0; i < sizeof(_loadFile_dir); i++){
+        tmp[i] = 0;
     }
     return f_loadFileFromCluster(fat, (uint16_t) cluster, buffer, bufferSize);
 }
