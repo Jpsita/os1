@@ -5,6 +5,8 @@ LIBKERNEL_DIR = libKernel
 ROOT_DIR=$(shell pwd)
 ELFLOADER_DIR = elfloader
 TESTEXEC_DIR = test_exec
+MY_CFLAGS = -fno-stack-protector -nostdlib
+TARGET = i686-elf
 export
 
 .PHONY: build
