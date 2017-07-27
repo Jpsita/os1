@@ -11,6 +11,7 @@ void (*_printString)(char* str) = 0;
 void (*_printCharacter)(char c) = 0;
 void (*_clearScreen)() = 0;
 void (*_deleteCurrentChar)() = 0;
+void (*_printUint32)(uint32_t num) = 0;
 
 char (*_getCh)() = 0;
 char (*_getCharacter)() = 0;
@@ -44,6 +45,11 @@ void v_bksp(){
     }
 
     _deleteCurrentChar();
+}
+
+void v_printUint32(uint32_t num){
+    GET_KERNEL_FUNCTION(_printUint32, PRINTUINT32_ID);
+    _printUint32(num);
 }
 
 char k_getCh(){

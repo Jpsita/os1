@@ -201,6 +201,8 @@ uint32_t handle_int_49(uint32_t id){
 			return (uint32_t) &printCharacter;
 		case PRINTSTRING_ID:
 			return (uint32_t) &printString;
+		case PRINTUINT32_ID:
+			return (uint32_t) &printUint32;
 		//keyboard
 		case BUFF_GETCH_ID:
 			return (uint32_t) &buff_getCh;
