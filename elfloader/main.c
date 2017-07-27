@@ -7,27 +7,33 @@ extern uint8_t* elfBuffer;
 
 
 uint32_t entryElf(char* path){
-	uint16_t res = f_loadFile(f_getFAT(), path, elfBuffer, 0x1400);
-	if(res == ~0){
+	uint16_t res = f_loadFile(f_getFAT(), path, elfBuffer, 0x6000);
+	if(res == (uint16_t) ~0){
+		v_printString("File loading failed\n");
 		return ~0;
 	}
 	Elf32_Ehdr* header = (Elf32_Ehdr*) elfBuffer;
 	if(!is_header_valid(header)){
+		v_printString("File is not a valid ELF file\n");
 		return ~0;
 	}
-	if(header->e_type != ELFCLASS32){
+	if(header->e_ident[EI_CLASS] != ELFCLASS32){
+		v_printString("File is not a 32 bit elf file\n");
 		return ~0;
 	}
-	if(header->e_machine != ELFDATA2LSB){
+	if(header->e_ident[EI_DATA] != ELFDATA2LSB){
+		v_printString("File is not in the correct byte order\n");
 		return ~0;
 	}
 	if(header->e_usage != ET_EXEC){
+		v_printString("File is not an executable\n");
 		return ~0;
 	}
-	if(header->e_ABI != EM_386){
+	if(header->e_machine != EM_386){
+		v_printString("Incorrect ABI for file\n");
 		return ~0;
 	}
-	uint8_t* elf_offset = (uint8_t*) 0x100000;
+	uint8_t* elf_offset = (uint8_t*) 0x120000;
 	uint8_t* ph_off = (uint8_t*) header->e_phoff;
 	uint32_t ph_size = (uint32_t) header->e_phentsize;
 	uint32_t ph_num = (uint32_t) header->e_phnum;
@@ -51,4 +57,4 @@ uint32_t entryElf(char* path){
 	return header->e_entry + (uint32_t) elf_offset;
 }
 
-uint8_t* elfBuffer = (uint8_t*) 0x36A00;
+uint8_t* elfBuffer = (uint8_t*) 0x100000;

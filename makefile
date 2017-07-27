@@ -49,6 +49,7 @@ install: kernel/build/kernel.rnb shell/build/shell.rnb
 	cp kernel/build/kernel.rnb /mountpoint/kernel.rnb
 	cp shell/build/shell.rnb /mountpoint/shell.rnb
 	cp elfloader/build/elfl.rnb /mountpoint/elfl.rnb
+	cp test_exec/build/test.elf /mountpoint/test.elf
 	sleep 2
 	umount /mountpoint
 uninstall:
@@ -56,5 +57,6 @@ uninstall:
 	rm /mountpoint/kernel.rnb
 	rm /mountpoint/shell.rnb
 	rm /mountpoint/elfl.rnb
+	rm /mountpoint/test.elf
 	sleep 2
 	umount /mountpoint

@@ -23,9 +23,9 @@ typedef int elf32_main(int, char**);
 #define EI_NIDENT			16
 
 #define ELFMAG0				0x7f		//e_ident[EI_MAG0]
-#define ELFMAG1				'E'			//e_ident[EI_MAG1]
-#define ELFMAG2				'L'			//e_ident[EI_MAG2]
-#define ELFMAG3				'F'			//e_ident[EI_MAG3]
+#define ELFMAG1				0x45		//e_ident[EI_MAG1]
+#define ELFMAG2				0x4c		//e_ident[EI_MAG2]
+#define ELFMAG3				0x46		//e_ident[EI_MAG3]
 
 #define ELFCLASSNONE		0			//Invalid Class
 #define ELFCLASS32			1			//32-bit objects
@@ -57,14 +57,8 @@ typedef int elf32_main(int, char**);
 
 typedef struct PACKED{
 	unsigned char		e_ident[EI_NIDENT]; //Object file Marker
-	Elf32_Uchar			e_type; 			//Object Architecture()
-	Elf32_Uchar			e_machine;			//Machine Type
-	Elf32_Uchar			e_version;			//Object File Version
-	Elf32_Uchar			e_ABI;				//OS Type (usually 0)
-	Elf32_Word			e_padding0;			//padding
-	Elf32_Word			e_padding1;			//padding
 	Elf32_Half			e_usage;			//object type (executable, relocatable, ecc)
-	Elf32_Half			e_instrSet;			//Instruction set
+	Elf32_Half			e_machine;			//Instruction set
 	Elf32_Word			e_version2;			//ELF Version (again)
 	Elf32_Addr			e_entry;			//Virtual entry point
 	Elf32_Off			e_phoff;			//Program Header Table Offset (bytes)

@@ -2,8 +2,8 @@ ENTRY (entryElf);
 SEARCH_DIR("../libKernel/build");
 SECTIONS
 {
-	. = 0x11C00;
-	.text : AT(0x11C00){
+	. = 0x37200;
+	.text : AT(0x37200){
 		build/main.o(.text);
 		build/main.o(.data);
 		build/main.o(.bss);
