@@ -1,9 +1,9 @@
-#include "floppy.h"
-#include "utils.h"
-#include "video.h"
-#include "interrupt.h"
-#include "rtc.h"
-#include "main.h"
+#include "kernel/floppy.h"
+#include "kernel/utils.h"
+#include "kernel/video.h"
+#include "kernel/interrupt.h"
+#include "kernel/rtc.h"
+#include "kernel/main.h"
 
 uint8_t floppyBuffer[DMA_MAX_TRANSFER_SIZE];
 

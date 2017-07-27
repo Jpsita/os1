@@ -1,11 +1,11 @@
-#include "interrupt.h"
-#include "keyboard.h"
-#include "utils.h"
-#include "video.h"
-#include "string.h"
-#include "functionIds.h"
-#include "fat.h"
-#include "kerneldefs.h"
+#include "kernel/interrupt.h"
+#include "kernel/keyboard.h"
+#include "kernel/utils.h"
+#include "kernel/video.h"
+#include "kernel/string.h"
+#include "common/functionIds.h"
+#include "kernel/fat.h"
+#include "kernel/kerneldefs.h"
 
 IDTDescr IDT[256];
 char echo_byte;

@@ -1,7 +1,7 @@
-#include "fat.h"
-#include "floppy.h"
-#include "string.h"
-#include "video.h"
+#include "kernel/fat.h"
+#include "kernel/floppy.h"
+#include "kernel/string.h"
+#include "kernel/video.h"
 
 FAT_IMPL initializeFAT(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBufferSize){
 	FAT_INFO fatInfo;

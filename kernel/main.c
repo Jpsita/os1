@@ -1,13 +1,13 @@
 #define C_STR char*
-#include "keyboard.h"
-#include "video.h"
-#include "utils.h"
-#include "interrupt.h"
-#include "floppy.h"
-#include "rtc.h"
-#include "fat.h"
-#include "string.h"
-#include "kerneldefs.h"
+#include "kernel/keyboard.h"
+#include "kernel/video.h"
+#include "kernel/utils.h"
+#include "kernel/interrupt.h"
+#include "kernel/floppy.h"
+#include "kernel/rtc.h"
+#include "kernel/fat.h"
+#include "kernel/string.h"
+#include "kernel/kerneldefs.h"
 
 extern uint8_t fat[];
 extern uint8_t root_dir[];

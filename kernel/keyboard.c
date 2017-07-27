@@ -1,9 +1,9 @@
-#include "keyboard.h"
-#include "scancodes.h"
-#include "video.h"
-#include "utils.h"
-#include "rtc.h"
-#include "interrupt.h"
+#include "kernel/keyboard.h"
+#include "kernel/scancodes.h"
+#include "kernel/video.h"
+#include "kernel/utils.h"
+#include "kernel/rtc.h"
+#include "kernel/interrupt.h"
 
 unsigned char KEYB_STATUS_BYTE = 0;
 uint8_t currentChar = 0;

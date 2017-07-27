@@ -1,4 +1,4 @@
-INC=-I../include/kernel
+INC=-I../include
 
 build: build/kernel.rnb symbols/kernel.sym
 

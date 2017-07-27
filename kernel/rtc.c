@@ -1,6 +1,6 @@
-#include "rtc.h"
-#include "utils.h"
-#include "interrupt.h"
+#include "kernel/rtc.h"
+#include "kernel/utils.h"
+#include "kernel/interrupt.h"
 
  void NMI_enable(void)
  {

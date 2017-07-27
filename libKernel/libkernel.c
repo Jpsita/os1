@@ -3,7 +3,7 @@
 #include "libkernel/utils.h"
 #include "libkernel/keyboard.h"
 #include "libkernel/string.h"
-#include "kernel/functionIds.h"
+#include "common/functionIds.h"
 
 #define GET_KERNEL_FUNCTION(fName, fId) if(fName == 0){ fName = util_int49(fId); }
 

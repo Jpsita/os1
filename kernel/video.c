@@ -1,6 +1,6 @@
-#include "video.h"
-#include "main.h"
-#include "utils.h"
+#include "kernel/video.h"
+#include "kernel/main.h"
+#include "kernel/utils.h"
 
 #define VGA_INDEX_REGISTER_PORT		0x000
 #define VGA_INDEX_COMMAND_PORT		0x001

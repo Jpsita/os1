@@ -1,4 +1,4 @@
-#include "scancodes.h"
+#include "kernel/scancodes.h"
 
 #ifdef KEYB_TYPE_IT
 

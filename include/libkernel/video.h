@@ -1,6 +1,8 @@
 #ifndef __LIBK_VIDEO_H
 #define __LIBK_VIDEO_H
 
+#include "definitions.h"
+
 void v_printCharacterAtPos(char c, char color, int x, int y);
 
 void v_printCharacter(char c);

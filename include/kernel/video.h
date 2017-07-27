@@ -1,8 +1,8 @@
 #ifndef __JPS_VIDEO_H
 #define __JPS_VIDEO_H
-#define COLOR_WHITE_BLACK 0x0F
 
 #include "main.h"
+#include <common/common_video.h>
 
 extern char * videoMem;
 

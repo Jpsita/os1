@@ -1,4 +1,4 @@
-#include "string.h"
+#include "kernel/string.h"
 
 uint32_t strlen(uint8_t* string){
 	uint32_t retval = 0;
