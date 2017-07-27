@@ -75,9 +75,10 @@ void parseLine(){
 		commandLine[0] = 0;
 		return;
 	}else if(s_strcmp(commandLine, "lelf") == 0){
-		v_printString("Trying to load ELF Loader");
+		v_printString("Trying to load ELF Loader\n");
 		ft = f_getFAT();
-		f_loadFile(ft, "/elfl.rnb", (uint8_t*) 0x34E00, 0x1C00);
+		uint32_t res = f_loadFile(ft, "/ELFL.RNB", (uint8_t*) 0x34E00, 0x1C00);
+		v_printUint32(res);
 	}else{
 		v_printString("Unknown command: '");
 		v_printString(commandLine);
