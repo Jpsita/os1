@@ -20,19 +20,17 @@ build/interrupt.o : interrupt.c ../include/kernel/interrupt.h ../include/kernel/
 	$(TARGET)-gcc -c interrupt.c -o "build/interrupt.o" -m32 -mtune=i386 -gdwarf $(INC) $(MY_CFLAGS)
 build/floppy.o : floppy.c ../include/kernel/floppy.h ../include/kernel/utils.h ../include/kernel/video.h ../include/kernel/interrupt.h ../include/kernel/rtc.h
 	$(TARGET)-gcc -c floppy.c -o "build/floppy.o" -m32 -mtune=i386 -gdwarf $(INC) $(MY_CFLAGS)
-build/rtc.o : rtc.c ../include/kernel/rtc.h ../include/kernel/utils.h ../include/kernel/interrupt.h 
+build/rtc.o : rtc.c ../include/kernel/rtc.h ../include/kernel/utils.h ../include/kernel/interrupt.h
 	$(TARGET)-gcc -c rtc.c -o "build/rtc.o" -m32 -mtune=i386 -gdwarf $(INC) $(MY_CFLAGS)
-build/scancodes.o : scancodes.c ../include/kernel/scancodes.h 
-	$(TARGET)-gcc -c scancodes.c -o "build/scancodes.o" -m32 -mtune=i386 -DKEYB_TYPE_CH -gdwarf $(INC) $(MY_CFLAGS)
+build/scancodes.o : scancodes.c ../include/kernel/scancodes.h
+	$(TARGET)-gcc -c scancodes.c -o "build/scancodes.o" -m32 -mtune=i386 -gdwarf $(INC) $(MY_CFLAGS)
 build/fat.o: fat.c ../include/kernel/fat.h ../include/kernel/string.h
 	$(TARGET)-gcc -c fat.c -o "build/fat.o" -m32 -mtune=i386 -gdwarf $(INC) $(MY_CFLAGS)
 build/string.o: string.c ../include/kernel/string.h
 	$(TARGET)-gcc -c string.c -o "build/string.o" -m32 -mtune=i386 -gdwarf $(INC) $(MY_CFLAGS)
-configure: 
+configure:
 	mkdir -p build
 	mkdir -p symbols
 clean:
 	rm -rf build/*
 	rm -rf symbols/*
-
-	

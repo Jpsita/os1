@@ -10,12 +10,13 @@
 
 unsigned short video_base;
 
-char * videoMem = (char * ) 0x000B8000;
+char * videoMem;
 int posX = 0;
 int posY = 0;
 
 void loadVideoPort(){
 	video_base = *(unsigned short*)(0x0463);
+	videoMem = (char * ) 0x000B8000;
 }
 
 void updateCursor(){
@@ -176,7 +177,7 @@ void printHex(uint32_t val){
 		case 0xF:
 		printCharacter('F');
 		break;
-		
+
 	}
 }
 

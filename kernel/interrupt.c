@@ -21,7 +21,7 @@ void PIC_sendEOI(unsigned char IRQ){
 void c_dbl_flt(){
 	printString("FAULT: DOBULE FAULT. IRRECOVERABLE ERROR. Press any key to reset. (Coming Soon)\n");
 	while(1){
-		
+
 	}
 }
 
@@ -34,10 +34,10 @@ void ZeroMemory(uint8_t* addr, uint32_t size) {
 void PIC_remap(int offset1, int offset2){
 
 	unsigned char a1, a2;
- 
+
 	a1 = inb(PIC1_DATA);                        // save masks
 	a2 = inb(PIC2_DATA);
- 
+
 	outb(PIC1_COMMAND, ICW1_INIT+ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
 	io_wait();
 	outb(PIC2_COMMAND, ICW1_INIT+ICW1_ICW4);
@@ -50,14 +50,14 @@ void PIC_remap(int offset1, int offset2){
 	io_wait();
 	outb(PIC2_DATA, 2);                       // ICW3: tell Slave PIC its cascade identity (0000 0010)
 	io_wait();
- 
+
 	outb(PIC1_DATA, ICW4_8086);
 	io_wait();
 	outb(PIC2_DATA, ICW4_8086);
 	io_wait();
- 
+
 	outb(PIC1_DATA, a1);   // restore saved masks.
-	outb(PIC2_DATA, a2);	
+	outb(PIC2_DATA, a2);
 }
 
 void handle_irq_1(){
@@ -78,6 +78,11 @@ void handle_irq_1(){
 	char k = scancodeToAscii(x);
 	red = 1;
 	//if(echo_byte != 0){
+	//printString("Scancode: ");
+	//printUint32((uint32_t)x);
+	//printString(" ASCII: ");
+	//printUint32((uint32_t) k);
+	//printString("\n");
 	parseKey(k);
 	//}
 }
@@ -95,28 +100,28 @@ void zero_IDT(IDTDescr * idt){
 void db0_fault(){
 	printString("FAULT: DB0. Check ESP for faulting address,");
 	while(1){
-		
+
 	}
 }
 
 void segment_fault(){
 	printString("FAULT: SEGMENT NOT PRESENT. Check ESP for faulting segment.");
 	while(1){
-		
+
 	}
 }
 
 void stack_fault(){
 	printString("FAULT: STACK SEGMENT NOT PRESENT.");
 	while(1){
-		
+
 	}
 }
 
 void overflow_fault(){
 	printString("FAULT: OVERFLOW");
 	while(1){
-		
+
 	}
 }
 
@@ -124,7 +129,7 @@ void protection_fault(uint32_t addr){
 	printString("FAULT: GENERIC PROTECTION\n");
 	printUint32(addr);
 	while(1){
-		
+
 	}
 }
 
@@ -139,7 +144,7 @@ void fill_IDT_entry(uint16_t vector, uint32_t address, uint16_t trap){
 	}else{
 		IDT[vector].type_attr = 0x8E;
 	}
-}	
+}
 
 void create_IDT(){
 	IDTPointer p;
@@ -170,7 +175,7 @@ void create_IDT(){
 	fill_IDT_entry(0x49, x49_addr, 0);
 	load_IDT((uint32_t) &p);
 	init_keyboard();
-	
+
 
 	outb(PIC1_DATA, 0b10111001);
 	outb(PIC2_DATA, 0xFE);

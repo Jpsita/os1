@@ -2,12 +2,12 @@
 #include "elfloader/elf_defs.h"
 #include "elfloader/elfFuncs.h"
 #include "libkernel.h"
+#include "common/staticmemorymap.h"
 
 extern uint8_t* elfBuffer;
 
-
 uint32_t entryElf(char* path){
-	uint16_t res = f_loadFile(f_getFAT(), path, elfBuffer, 0x6000);
+	uint16_t res = f_loadFile(f_getFAT(), path, elfBuffer, ELF_BUFF_SIZE);
 	if(res == (uint16_t) ~0){
 		v_printString("File loading failed\n");
 		return ~0;
@@ -33,7 +33,7 @@ uint32_t entryElf(char* path){
 		v_printString("Incorrect ABI for file\n");
 		return ~0;
 	}
-	uint8_t* elf_offset = (uint8_t*) 0x120000;
+	uint8_t* elf_offset = (uint8_t*) EXE_BUFF_START;
 	uint8_t* ph_off = (uint8_t*) header->e_phoff;
 	uint32_t ph_size = (uint32_t) header->e_phentsize;
 	uint32_t ph_num = (uint32_t) header->e_phnum;
@@ -54,7 +54,7 @@ uint32_t entryElf(char* path){
 		}
 	}
 
-	return header->e_entry + (uint32_t) elf_offset;
+	return header->e_entry + (uint32_t) EXE_BUFF_START;
 }
 
-uint8_t* elfBuffer = (uint8_t*) 0x100000;
+uint8_t* elfBuffer = (uint8_t*) ELF_BUFF_START;

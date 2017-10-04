@@ -8,6 +8,7 @@
 #include "kernel/fat.h"
 #include "kernel/string.h"
 #include "kernel/kerneldefs.h"
+#include "common/staticmemorymap.h"
 
 extern uint8_t fat[];
 extern uint8_t root_dir[];
@@ -30,6 +31,7 @@ void entryc(){
 	floppy_init();
 
 	printString("os1 Booting...\n");
+
 	fa_impl = initializeFAT(1, fat, 18*512, root_dir, 240 * 32);
 	if(fa_impl.fat == 0){
 		printString("Error loading FAT. Buffer too small\n");
@@ -59,17 +61,12 @@ void entryc(){
 	if(shell_id != -1){
 		printString("Loading Shell...\n");
 		//enable_echo();
-		tmpPtr = (uint8_t*) 0x33200;
-		uint32_t size = loadFileFromCluster(&fa_impl, root_dir_entries[shell_id].cluster, tmpPtr, 0xE00);
-		//printUint32(size);
-		//printString("Size: ");
-		//printUint32(size);
-		//floppy_read(0x38, 1024, tmpPtr);
-		//enable_echo();
+		tmpPtr = (uint8_t*) SHELL_BUFF_START;
+		uint32_t size = loadFileFromCluster(&fa_impl, root_dir_entries[shell_id].cluster, tmpPtr, SHELL_BUFF_SIZE);
 		sleepMs(1000);
 		printString("Calling shell...\n");
 		sleepMs(100);
-		callShell = (void (*)) tmpPtr;
+		callShell = (void (*)) SHELL_INIT_ADDR;
 		callShell();
 	}else
 		printString("Shell not found.\n");

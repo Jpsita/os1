@@ -3,6 +3,7 @@
 #include "libkernel/keyboard.h"
 #include "libkernel/string.h"
 #include "libkernel/fat.h"
+#include "common/staticmemorymap.h"
 #include "elfloader.h"
 
 typedef int(*APP_MAIN)(int, char**);
@@ -88,7 +89,7 @@ void parseLine(){
 		}else{
 			v_printString("Trying to load ELF Loader...\n");
 			ft = f_getFAT();
-			uint32_t res = f_loadFile(ft, "/ELFL.RNB", (uint8_t*) 0x37200, 0x4000);
+			uint32_t res = f_loadFile(ft, "/ELFL.RNB", (uint8_t*) ELFL_BUFF_START, ELFL_BUFF_SIZE);
 			if(res != ~0){
 				v_printString("ELF Loader loaded succesfully.");
 				isElfLoaderLoaded = 1;
@@ -101,7 +102,7 @@ void parseLine(){
 	}else if(s_strcmp(commandLine, "elf") == 1){
 		if(isElfLoaderLoaded == 0){
 			v_printString("Please load the ELF Loader before executing this command.\n");
-			v_printString("(Run lelf or see the help screen)");
+			v_printString("(Run \"lelf\" or see the help screen)");
 		}else{
 			uint32_t res = elf_main(commandLine + 4);
 			v_printString("ELF Loader returned: ");
@@ -131,6 +132,6 @@ uint8_t	currentPath[256];
 uint8_t commandLine[256];
 uint32_t lineWidth = 0;
 uint8_t isElfLoaderLoaded = 0;
-ELF_MAIN elf_main = (ELF_MAIN) 0x34E00;
+ELF_MAIN elf_main = (ELF_MAIN) ELFL_INIT_ADDR;
 FAT_IMPL *ft;
 APP_MAIN app_main;

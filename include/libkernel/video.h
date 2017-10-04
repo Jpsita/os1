@@ -10,5 +10,6 @@ void v_printString(char* s);
 void v_clear();
 void v_bksp();
 void v_printUint32(uint32_t num);
+void v_log(char* s);
 
 #endif

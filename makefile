@@ -5,8 +5,8 @@ LIBKERNEL_DIR = libKernel
 ROOT_DIR=$(shell pwd)
 ELFLOADER_DIR = elfloader
 TESTEXEC_DIR = test_exec
-MY_CFLAGS = -fno-stack-protector -nostdlib
-TARGET = i686-elf
+MY_CFLAGS = -fno-stack-protector -nostdlib -DKEYB_TYPE_IT -DDEBUG_LOG
+TARGET =
 export
 
 .PHONY: build
@@ -36,7 +36,7 @@ configure:
 	$(MAKE) -C $(ELFLOADER_DIR) configure
 	$(MAKE) -C $(TESTEXEC_DIR) configure
 
-pack: images/floppy.img loader/build/bootloader.bin 
+pack: images/floppy.img loader/build/bootloader.bin
 	dd if=./loader/build/bootloader.bin of=./images/floppy.img conv=notrunc bs=512
 images/floppy.img:
 	dd if=/dev/zero of=./images/floppy.img bs=512 count=2880

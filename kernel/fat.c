@@ -2,6 +2,7 @@
 #include "kernel/floppy.h"
 #include "kernel/string.h"
 #include "kernel/video.h"
+#include "common/staticmemorymap.h"
 
 FAT_IMPL initializeFAT(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, uint8_t* dirBuffer, uint16_t dirBufferSize){
 	FAT_INFO fatInfo;
@@ -19,7 +20,7 @@ FAT_IMPL initializeFAT(uint8_t isFloppy, uint8_t *buffer, uint16_t bufferSize, u
 	}
 
 	floppy_read(fatInfo.reserved_sectors, requiredSize, buffer);
-	uint16_t rootDirectoryCluster = fatInfo.reserved_sectors + (fatInfo.sectors_per_fat * fatInfo.number_of_fats); 
+	uint16_t rootDirectoryCluster = fatInfo.reserved_sectors + (fatInfo.sectors_per_fat * fatInfo.number_of_fats);
 	uint16_t rootDirectorySize = fatInfo.max_root_dirs * 32;
 	floppy_read(rootDirectoryCluster, rootDirectorySize, dirBuffer);
 
@@ -65,7 +66,7 @@ uint32_t loadFileFromCluster(FAT_IMPL* fat, uint16_t cluster, uint8_t* buffer, u
 	return redBytes;
 }
 
-uint8_t tempDirBuffer[1024];
+uint8_t* tempDirBuffer = (uint8_t*) FAT_DIR_BUFF_START;
 
 uint16_t readDirectoryEntry(uint8_t* ptr, FAT_DIR_LN_ENTRY* output) {
 	uint16_t n_entries = 0;
@@ -97,7 +98,7 @@ uint16_t readDirectoryEntry(uint8_t* ptr, FAT_DIR_LN_ENTRY* output) {
 			en = (FAT_ENTRY*)ptr;
 			if (strcat_nn(ent->long_name, en->name, 8, ' ') != 0) {
 				if ((en->attributes & 0x10) == 0) {
-					
+
 					stradd(ent->long_name, '.');
 					strcat_n(ent->long_name, en->extension, 3);
 				}
@@ -167,4 +168,3 @@ uint16_t listFilesFAT(FAT_IMPL* fat, uint8_t* path, FAT_DIR_LN_ENTRY* output, ui
 	}while (pos != ~0);
 	return n_entries;
 }
-

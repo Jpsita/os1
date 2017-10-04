@@ -4,8 +4,9 @@
 #include "kernel/interrupt.h"
 #include "kernel/rtc.h"
 #include "kernel/main.h"
+#include "common/staticmemorymap.h"
 
-uint8_t floppyBuffer[DMA_MAX_TRANSFER_SIZE];
+uint8_t* floppyBuffer = (uint8_t*) FLOPPY_BUFF_START;
 
 char handled_irq = 0;
 
@@ -43,7 +44,7 @@ void init_floppy_DMA(uint32_t addr, uint16_t count){
 
 //Sets DMA channel 2 to read from memory and write to floppy
 void init_DMA_floppy_write(uint16_t count){
-	outb(DMA_1_SING_MASK_REG_IO, 0x06); //mask channels 2 and 0	
+	outb(DMA_1_SING_MASK_REG_IO, 0x06); //mask channels 2 and 0
 	outb(DMA_1_FF_REG_IO, 0xFF); //reset master flip flop
 	outb(DMA_COUNT_REG_IO_2, (uint8_t) count); //low byte of count
 	outb(DMA_COUNT_REG_IO_2, (uint8_t) (count >> 8)); //high byte of count
@@ -119,7 +120,7 @@ void floppy_reset(){
 	sleepMs(10);
 	outb(FLOPPY_DIGITAL_OUTPUT_REG_IO,dor);
 	while(handled_irq == 0){
-		
+
 	}
 	handled_irq = 0;
 }
@@ -172,7 +173,7 @@ void floppy_recalibrate(uint32_t disk){
 void floppy_init(){
 	uint32_t floppy_addr = (uint32_t) floppyBuffer;
 	init_floppy_DMA(floppy_addr, DMA_MAX_TRANSFER_SIZE - 1); //-1 is required by DMA
-	
+
 	check_floppy_version();
 
 	floppy_reset();
@@ -238,7 +239,7 @@ void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
 	uint16_t sector_count = (bytecount / 512) + ((bytecount % 512 == 0)? 0: 1);
 
 	lba_2_chs(lba, &cyl, &head, &sec);
-	
+
 	floppy_waitForNextParam();
 	outb(FLOPPY_DATA_FIFO_IO, FLOPPY_CMD_OPTION_MT | FLOPPY_CMD_OPTION_MF | FLOPPY_CMD_READ_DATA);
 	floppy_waitForNextParam();
@@ -312,7 +313,7 @@ void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
 	if(eRes != 2){
 		printString("ERROR ON READING FLOPPY\n");
 		while(1){
-			
+
 		}
 	}
 
@@ -322,11 +323,10 @@ void floppy_read(uint32_t lba, uint16_t bytecount, uint8_t* addr){
 	for(int i = 0; i < bytecount; i++){
 		addr[i] = floppyBuffer[i];
 	}
-	ZeroMemory(floppyBuffer, sizeof(floppyBuffer));
+	ZeroMemory(floppyBuffer, bytecount);
 }
 
 void handle_irq_6(){
 	handled_irq = 1;
 	PIC_sendEOI(0x06);
 }
-

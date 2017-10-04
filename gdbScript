@@ -1,10 +1,11 @@
 add-symbol-file loader/symbols/bootloader.sym 0x7C00
 add-symbol-file kernel/symbols/kernel.sym 0x8e00
-# add-symbol-file shell/symbols/shell.sym 0x33200
-# add-symbol-file elfloader/symbols/elfloader.sym 0x34E00
-add-symbol-file test_exec/symbols/test.sym 0x120000
-dir ./libKernel
+#add-symbol-file shell/symbols/shell.sym 0x40000
+#add-symbol-file elfloader/symbols/elfloader.sym 0x50000
+#add-symbol-file test_exec/symbols/test.sym 0x100000
+#dir ./libKernel
 dir ./bootloader
+dir ./kernel
 
 set disassembly-flavor intel
 

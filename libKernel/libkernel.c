@@ -17,6 +17,14 @@ char (*_getCh)() = 0;
 char (*_getCharacter)() = 0;
 void (*_buff_clean)() = 0;
 
+void v_log(char* s){
+  #ifdef DEBUG_LOG
+  v_printString("Log: \"");
+  v_printString(s);
+  v_printString("\"\n");
+  #endif
+}
+
 void v_printString(char* s){
     if(_printString == 0){
         _printString = util_int49(PRINTSTRING_ID);
@@ -181,11 +189,13 @@ uint8_t _loadFile_fileName[128];
 FAT_DIR_LN_ENTRY _loadFile_dir[64];
 
 uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferSize){
+    v_log("Loading file...");
     uint32_t pos = 0;
     s_strpos_r(path, '/');
     uint32_t len = s_strlen(path);
     s_substr(path, _loadFile_fileName, pos + 1, len);
     s_substr(path, _loadFile_buff, 0, pos + 1);
+    v_log("ListFilesFat...");
     uint16_t res = f_listFilesFAT(fat, _loadFile_buff, _loadFile_dir, 64);
     uint32_t cluster = 0;
     for(int i = 0; i < res; i++){
@@ -209,5 +219,6 @@ uint32_t f_loadFile(FAT_IMPL* fat, char* path, uint8_t* buffer, uint32_t bufferS
     for(int i = 0; i < sizeof(_loadFile_dir); i++){
         tmp[i] = 0;
     }
+    v_log("LoadFileFromCluster...");
     return f_loadFileFromCluster(fat, (uint16_t) cluster, buffer, bufferSize);
 }

@@ -13,45 +13,15 @@ SECTIONS
 		build/floppy.o(.text);
 		build/fat.o(.text);
 		build/string.o(.text);
-
-
-		build/main.o(.rodata);
 		build/main.o(.rel.text);
-
-
-		build/utils.o(.rodata);
 		build/utils.o(.rel.text);
-
-
-		build/video.o(.rodata);
 		build/video.o(.rel.text);
-
-
-		build/interrupt.o(.rodata);
 		build/interrupt.o(.rel.text);
-
-
-		build/keyboard.o(.rodata);
 		build/keyboard.o(.rel.text);
-
-
-		build/scancodes.o(.rodata);
 		build/scancodes.o(.rel.text);
-
-
-		build/rtc.o(.rodata);
 		build/rtc.o(.rel.text);
-
-
-		build/floppy.o(.rodata);
 		build/floppy.o(.rel.text);
-
-
-		build/fat.o(.rodata);
 		build/fat.o(.rel.text);
-
-
-		build/string.o(.rodata);
 		build/string.o(.rel.text);
 	}
 	.data : {
@@ -65,6 +35,18 @@ SECTIONS
 		build/floppy.o(.data);
 		build/fat.o(.data);
 		build/string.o(.data);
+	}
+	.rodata : {
+		build/main.o(.rodata);
+		build/utils.o(.rodata);
+		build/video.o(.rodata);
+		build/interrupt.o(.rodata);
+		build/keyboard.o(.rodata);
+		build/scancodes.o(.rodata);
+		build/rtc.o(.rodata);
+		build/floppy.o(.rodata);
+		build/fat.o(.rodata);
+		build/string.o(.rodata);
 	}
 	.bss : {
 		build/main.o(.bss);

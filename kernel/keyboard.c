@@ -4,6 +4,7 @@
 #include "kernel/utils.h"
 #include "kernel/rtc.h"
 #include "kernel/interrupt.h"
+#include "common/staticmemorymap.h"
 
 unsigned char KEYB_STATUS_BYTE = 0;
 uint8_t currentChar = 0;
@@ -150,8 +151,8 @@ void init_keyboard(){
 		x = inb(PS2_DATA_PORT);
 		//printCharacter('r');
 	}
-	keyboardBuffer = (uint8_t*) 0x32E00;
-	keyboardBufferEnd = (uint8_t*) 0x33200;
+	keyboardBuffer = (uint8_t*) KEYB_BUFF_START;
+	keyboardBufferEnd = (uint8_t*) KEYB_BUFF_END;
 	nextChar = keyboardBuffer + 1;
 	nextRead = keyboardBuffer;
 }
